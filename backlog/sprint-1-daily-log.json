@@ -1,0 +1,15 @@
+{
+ "sprint": 1,
+ "days": [
+  {"date": "2026-11-16", "done": [], "note": "Sprint planning: cam kết 10 issue / 66 SWP / 267 giờ"},
+  {"date": "2026-11-17", "done": ["I-0101"], "note": "Khung monorepo + CI xong"},
+  {"date": "2026-11-18", "done": ["I-0107"], "note": "Gửi OQ-28/29/30/58 cho khách qua BrSE"},
+  {"date": "2026-11-19", "done": ["I-0501.1"], "note": "I-0802 chuyển Blocked: khách chưa có người xác minh pháp lý"},
+  {"date": "2026-11-20", "done": ["I-0204", "I-0106.1"], "note": ""},
+  {"date": "2026-11-23", "done": ["I-0102", "I-0803.1"], "note": "Phát hiện tuyến qua đêm làm I-0803.2 khó hơn dự kiến"},
+  {"date": "2026-11-24", "done": ["I-0801.1", "I-0501.2"], "note": "IdP test tenant của khách chưa cấp MFA → I-0103 chờ"},
+  {"date": "2026-11-25", "done": ["I-0106.2", "I-0106"], "note": ""},
+  {"date": "2026-11-26", "done": ["I-0801.2", "I-0801"], "note": "SCR-017 hiển thị banner 法務未確認 đúng spec"},
+  {"date": "2026-11-27", "done": [], "note": "Review: I-0103 còn 2 comment; I-0501, I-0803 chuyển tiếp Sprint 2"}
+ ]
+}

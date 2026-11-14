@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 360" width="760" height="360" font-family="system-ui,Segoe UI,sans-serif" role="img" aria-label="Burndown Sprint 1 theo SWP">
+<rect width="760" height="360" fill="#fcfcfb"/>
+<text x="56" y="24" font-size="15" font-weight="600" fill="#0b0b0b">Burndown Sprint 1 (16–27/11/2026) — SWP còn lại</text>
+<line x1="56" x2="610" y1="304.0" y2="304.0" stroke="#e4e3df" stroke-width="1"/>
+<text x="48" y="308.0" font-size="11" text-anchor="end" fill="#52514e">0</text>
+<line x1="56" x2="610" y1="264.0" y2="264.0" stroke="#e4e3df" stroke-width="1"/>
+<text x="48" y="268.0" font-size="11" text-anchor="end" fill="#52514e">10</text>
+<line x1="56" x2="610" y1="224.0" y2="224.0" stroke="#e4e3df" stroke-width="1"/>
+<text x="48" y="228.0" font-size="11" text-anchor="end" fill="#52514e">20</text>
+<line x1="56" x2="610" y1="184.0" y2="184.0" stroke="#e4e3df" stroke-width="1"/>
+<text x="48" y="188.0" font-size="11" text-anchor="end" fill="#52514e">30</text>
+<line x1="56" x2="610" y1="144.0" y2="144.0" stroke="#e4e3df" stroke-width="1"/>
+<text x="48" y="148.0" font-size="11" text-anchor="end" fill="#52514e">40</text>
+<line x1="56" x2="610" y1="104.0" y2="104.0" stroke="#e4e3df" stroke-width="1"/>
+<text x="48" y="108.0" font-size="11" text-anchor="end" fill="#52514e">50</text>
+<line x1="56" x2="610" y1="64.0" y2="64.0" stroke="#e4e3df" stroke-width="1"/>
+<text x="48" y="68.0" font-size="11" text-anchor="end" fill="#52514e">60</text>
+<text x="56.0" y="322" font-size="11" text-anchor="middle" fill="#52514e">11-16</text>
+<text x="117.6" y="322" font-size="11" text-anchor="middle" fill="#52514e">11-17</text>
+<text x="179.1" y="322" font-size="11" text-anchor="middle" fill="#52514e">11-18</text>
+<text x="240.7" y="322" font-size="11" text-anchor="middle" fill="#52514e">11-19</text>
+<text x="302.2" y="322" font-size="11" text-anchor="middle" fill="#52514e">11-20</text>
+<text x="363.8" y="322" font-size="11" text-anchor="middle" fill="#52514e">11-23</text>
+<text x="425.3" y="322" font-size="11" text-anchor="middle" fill="#52514e">11-24</text>
+<text x="486.9" y="322" font-size="11" text-anchor="middle" fill="#52514e">11-25</text>
+<text x="548.4" y="322" font-size="11" text-anchor="middle" fill="#52514e">11-26</text>
+<text x="610.0" y="322" font-size="11" text-anchor="middle" fill="#52514e">11-27</text>
+<polyline points="56.0,40.0 117.6,69.2 179.1,98.8 240.7,128.0 302.2,157.2 363.8,186.8 425.3,216.0 486.9,245.2 548.4,274.8 610.0,304.0" fill="none" stroke="#52514e" stroke-width="2" stroke-dasharray="6 5"/>
+<polyline points="56.0,40.0 117.6,52.0 179.1,64.0 240.7,64.0 302.2,84.0 363.8,104.0 425.3,104.0 486.9,136.0 548.4,168.0 610.0,168.0" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/>
+<circle cx="56.0" cy="40.0" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"><title>2026-11-16: còn 66 SWP, 267 giờ</title></circle>
+<circle cx="117.6" cy="52.0" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"><title>2026-11-17: còn 63 SWP, 255 giờ</title></circle>
+<circle cx="179.1" cy="64.0" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"><title>2026-11-18: còn 60 SWP, 243 giờ</title></circle>
+<circle cx="240.7" cy="64.0" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"><title>2026-11-19: còn 60 SWP, 230 giờ</title></circle>
+<circle cx="302.2" cy="84.0" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"><title>2026-11-20: còn 55 SWP, 194 giờ</title></circle>
+<circle cx="363.8" cy="104.0" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"><title>2026-11-23: còn 50 SWP, 161 giờ</title></circle>
+<circle cx="425.3" cy="104.0" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"><title>2026-11-24: còn 50 SWP, 132 giờ</title></circle>
+<circle cx="486.9" cy="136.0" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"><title>2026-11-25: còn 42 SWP, 116 giờ</title></circle>
+<circle cx="548.4" cy="168.0" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"><title>2026-11-26: còn 34 SWP, 100 giờ</title></circle>
+<circle cx="610.0" cy="168.0" r="4" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"><title>2026-11-27: còn 34 SWP, 100 giờ</title></circle>
+<text x="620" y="172.0" font-size="12" fill="#0b0b0b">Thực tế: còn 34 SWP</text>
+<text x="620" y="308.0" font-size="12" fill="#52514e">Lý tưởng: 0</text>
+<text x="56" y="348" font-size="11" fill="#52514e">SWP chỉ giảm khi issue Done (issue In Review/In Progress chưa tính). Trục ngang: ngày làm việc.</text>
+</svg>

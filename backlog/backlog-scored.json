@@ -1,0 +1,3333 @@
+{
+ "meta": {
+  "project": "Product B — Yuki Cold Logistics (chuỗi kho lạnh thực phẩm)",
+  "source": "LAB-4 lab 4-AIDD (nộp 2026-11-14)",
+  "owners": [
+   "TL",
+   "BE1",
+   "BE2",
+   "BE3",
+   "FE1",
+   "QA1",
+   "BrSE"
+  ],
+  "sprints": {
+   "1": {
+    "title": "Sprint 1",
+    "start": "2026-11-16",
+    "end": "2026-11-27"
+   },
+   "2": {
+    "title": "Sprint 2",
+    "start": "2026-11-30",
+    "end": "2026-12-11"
+   },
+   "3": {
+    "title": "Sprint 3",
+    "start": "2026-12-14",
+    "end": "2026-12-25"
+   }
+  }
+ },
+ "epics": [
+  {
+   "key": "E01",
+   "feature": "F01",
+   "title": "Nền tảng kỹ thuật, xác thực, phân quyền, audit",
+   "spec": "architecture.md §1–3, §6; ADR-001/002/008; permissions-matrix.md",
+   "notIssued": "Màn đăng nhập/khóa phiên (mức List) gộp trong #{I-0109} chờ spec. NFR hiệu năng, BCP, quét bảo mật là hạng mục cố định của LAB-1, không phải issue dev.",
+   "lab1Why": "LAB-1 có 25 MD dựng platform + 3 tính năng chưa có spec (FT-01-05/08/09) nay chỉ là 1 issue thô; một phần IaC/CI LAB-1 tính ở hạng mục cố định."
+  },
+  {
+   "key": "E02",
+   "feature": "F02",
+   "title": "Master & chính sách nhiệt có phiên bản",
+   "spec": "F02-policy-versioning; SCR016; ADR-003; prototype-vs-design G-01/02/07/23/32",
+   "notIssued": "Các màn master mức List (SCR-010…015) chưa issue riêng: CRUD theo mẫu, issue hóa khi có spec màn. Ngưỡng nhiệt riêng SKU (OQ-25) chưa thành issue vì RFP không yêu cầu.",
+   "lab1Why": "Chưa issue hóa các màn master mức List; FT-02-07 (version giờ lái) chuyển sang E08."
+  },
+  {
+   "key": "E03",
+   "feature": "F03",
+   "title": "Nhập hàng & kiểm nhập",
+   "spec": "F03-inbound-inspection; SCR021; SCR022; T-02/T-03",
+   "notIssued": "Đo lại trong 15 phút / trạng thái 保留 (OQ-56, mâu thuẫn RFP) chưa thành issue. Phần làm SCR-020/023 chỉ có issue thiết kế #{I-0306}.",
+   "lab1Why": "SCR-020 hẹn nhập và SCR-023 vùng nhiệt tạm (FT-03-01/06, 11 MD) mới có issue thiết kế, phần làm chưa ước lượng (OQ-63 BLOCK)."
+  },
+  {
+   "key": "E04",
+   "feature": "F04",
+   "title": "Tồn kho, lô, cách ly",
+   "spec": "F04-inventory-quarantine; SCR034; T-04/T-05/T-11c",
+   "notIssued": "Kiểm kê mù chỉ có issue thiết kế #{I-0406}; vị trí -Q đầy (OQ-48) xử lý STUB trong #{I-0403}.",
+   "lab1Why": "Kiểm kê mù FT-04-04 (12 MD) mới có issue thiết kế (OQ-62 BLOCK)."
+  },
+  {
+   "key": "E05",
+   "feature": "F05",
+   "title": "Đơn hàng & phân bổ (消費/賞味, 1/3·1/2, cấm đảo ngày, FEFO)",
+   "spec": "F05-allocation; SCR042; ADR-004/005; T-06…T-10",
+   "notIssued": "Đơn con backorder (OQ-08 BLOCK) chưa có mô hình; cảnh báo sớm phân bổ trùng cặp KH–SKU (OQ-11) để sau.",
+   "lab1Why": "Tái dùng expiry-rules và allocation-engine đã có unit test ở prototype LAB-2 (PREMISE LAB-4: chỉ giữ module quy tắc thuần); SCR-040/041 còn mức List."
+  },
+  {
+   "key": "E06",
+   "feature": "F06",
+   "title": "Pick, load, kiểm trước xuất, xác nhận xuất (4 chốt)",
+   "spec": "F06-outbound-check; SCR051; SCR053; T-11/T-11b/T-12",
+   "notIssued": "Tái kiểm sau FAIL kiểm trước xuất (OQ-61) làm bằng CFG trong #{I-0602}; deviation do chênh nhiệt tài xế/WHL (OQ-55) chưa thiết kế.",
+   "lab1Why": "Gần khớp: #{I-0604} (dỡ đơn → version tuyến mới → kiểm giờ lái lại, PREMISE D-02) tăng effort, bù phần giảm do tái dùng."
+  },
+  {
+   "key": "E07",
+   "feature": "F08",
+   "title": "Lập tuyến & bản đồ (phần không phụ thuộc luật giờ lái)",
+   "spec": "F08-route-duty-hours (ALG-801, SM-801, DEC-802/803); SCR060 phần stop/xe; T-18",
+   "notIssued": "Phân loại/báo cáo làm thêm có kế hoạch (OQ-64) chưa thiết kế; tối ưu tuyến tự động (VRP) không có trong RFP.",
+   "lab1Why": "Gần khớp: thêm adapter bản đồ + fake provider (PREMISE S-06), bản đồ chuyển từ F12 sang đây."
+  },
+  {
+   "key": "E08",
+   "feature": "F08+FT-02-07",
+   "constraint": true,
+   "title": "⚠ Giới hạn giờ lái xe tải 2024 (改善基準告示)",
+   "spec": "F08 FR-SCH-02/03/05, DSG-DUTY-01/02/03; SCR017; SCR060 panel kiểm giờ; ADR-006; T-13…T-17",
+   "notIssued": "Ngoại lệ 告示 (310h/tháng, 14h tối đa 2 lần/tuần, nghỉ chia đôi, đường dài, 2 tài xế, phà; OQ-30 BLOCK) chưa thành issue vì chưa biết khách có áp dụng. Tích hợp tachograph (upsale P2, OQ-32) ngoài phạm vi.",
+   "lab1Why": "Ràng buộc 2024 làm tăng effort: validator tách 5 issue theo nhóm mã, +1 Complexity pháp lý, bộ test biên #{I-0813} (PREMISE S-04), SCR-063 (S-01), SCR-062 (S-03), cổng công bố trong transaction. LAB-1 chưa có các phần này."
+  },
+  {
+   "key": "E09",
+   "feature": "F07",
+   "title": "Giao hàng, POD offline, khiếu nại",
+   "spec": "ADR-009; feature-list F07 (mức kiến trúc)",
+   "notIssued": "Spec chi tiết F07 (SCR-070…072) chưa có ở LAB-4 → mọi issue gắn needs-design, ước lượng thô.",
+   "lab1Why": "F07 chỉ có ở mức kiến trúc (ADR-009) → issue thô; OQ-38 BLOCK, OQ-39 STUB."
+  },
+  {
+   "key": "E10",
+   "feature": "F09",
+   "title": "Giám sát nhiệt, sai lệch, HACCP",
+   "spec": "F09-temperature-monitoring; SCR082; ADR-007; T-19…T-21b",
+   "notIssued": "Đo lại 15 phút/保留 (OQ-56) như E03. HACCP chi tiết chờ #{I-1006}.",
+   "lab1Why": "HACCP FT-09-05…07 (19 MD) mới có issue thiết kế."
+  },
+  {
+   "key": "E11",
+   "feature": "F10",
+   "title": "Truy xuất & thu hồi",
+   "spec": "feature-list F10 (mức dữ liệu: delivery_line, lot)",
+   "notIssued": "Spec màn F10 chưa có (LAB-4 chỉ ở mức dữ liệu): 2 issue thô.",
+   "lab1Why": "F10 chỉ ở mức dữ liệu → ước lượng thô, nhiều khả năng thiếu."
+  },
+  {
+   "key": "E12",
+   "feature": "F11",
+   "title": "Báo cáo, KPI, xuất kiểm toán",
+   "spec": "feature-list F11 (mức kiến trúc: read replica, manifest)",
+   "notIssued": "12 báo cáo chưa có spec từng báo cáo → tạm chia 6 + 6.",
+   "lab1Why": "12 báo cáo gộp 2 issue giữ chỗ: thấp hơn thực tế, phải estimate lại khi có spec."
+  },
+  {
+   "key": "E13",
+   "feature": "F12",
+   "title": "Tích hợp ngoài (ERP SFTP, archive, giám sát interface)",
+   "spec": "architecture.md §4",
+   "notIssued": "Tích hợp bản đồ chuyển sang E07 (#{I-0702}) vì gắn với luật cấm công bố khi ước tính > 24h.",
+   "lab1Why": "Bản đồ chuyển sang E07; schema ERP (OQ-41) chưa có."
+  },
+  {
+   "key": "E14",
+   "feature": "F13",
+   "title": "Chuyển đổi dữ liệu",
+   "spec": "feature-list F13 (mức nguyên tắc ACCEPT/REJECT/DUPLICATE/BUSINESS-REVIEW)",
+   "notIssued": "Workshop mapping, dry run, rehearsal (hạng mục cố định LAB-1, 67 MD) là hoạt động dự án, không phải issue dev.",
+   "lab1Why": "Chưa có spec dữ liệu nguồn; LAB-1 tính đủ tool + lineage chi tiết."
+  }
+ ],
+ "issues": [
+  {
+   "key": "I-0101",
+   "epic": "E01",
+   "title": "Khởi tạo monorepo Next.js + NestJS modular monolith, ESLint boundaries, CI",
+   "spec": "ADR-001; architecture.md §3",
+   "lab1": "PLATFORM",
+   "S": 3,
+   "C": 2,
+   "owner": "TL",
+   "sprint": 1,
+   "status": "Done",
+   "dod": "Build + lint + unit test chạy trên CI; import chéo repository giữa module bị ESLint chặn",
+   "cEff": 2,
+   "swpSkill": 3,
+   "swp": 3,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 12,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0102",
+   "epic": "E01",
+   "title": "IaC AWS Tokyo cho môi trường dev/stg (VPC, RDS PostgreSQL 16, ECS)",
+   "spec": "ADR-001; architecture.md §7",
+   "lab1": "PLATFORM",
+   "S": 3,
+   "C": 3,
+   "owner": "BE3",
+   "sprint": 1,
+   "status": "Done",
+   "dod": "terraform apply tạo được dev; stg Multi-AZ; secret qua Secrets Manager, không có trong repo",
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0103",
+   "epic": "E01",
+   "title": "Đăng nhập OIDC + PKCE, session, MFA cho vai trò đặc quyền",
+   "spec": "FT-01-01, FT-01-02; ADR-008; IF-IDP-01",
+   "lab1": "FT-01-01,FT-01-02",
+   "S": 3,
+   "C": 3,
+   "owner": "BE2",
+   "sprint": 1,
+   "status": "In Review",
+   "dod": "Đăng nhập qua IdP test; vai trò QA/MDM/SYS bị yêu cầu MFA (MFA_REQUIRED)",
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0104",
+   "epic": "E01",
+   "title": "RBAC guard PERM × 10 vai trò + test ma trận quyền E2E",
+   "spec": "FT-01-03; permissions-matrix.md; T-23",
+   "lab1": "FT-01-03",
+   "S": 4,
+   "C": 3,
+   "owner": "BE2",
+   "sprint": 2,
+   "status": "Todo",
+   "dod": "Ma trận E2E PERM × vai trò khớp permissions-matrix.md; không có vai trò toàn quyền (G-11)",
+   "subs": [
+    [
+     "Guard PERM + seed vai trò",
+     0.5,
+     "BE2"
+    ],
+    [
+     "Test E2E ma trận PERM × vai trò",
+     0.5,
+     "QA1"
+    ]
+   ],
+   "cEff": 3,
+   "swpSkill": 8,
+   "swp": 8,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 32,
+   "k": 1.0,
+   "subIssues": [
+    {
+     "title": "Guard PERM + seed vai trò",
+     "share": 0.5,
+     "owner": "BE2",
+     "status": null,
+     "hours": 16
+    },
+    {
+     "title": "Test E2E ma trận PERM × vai trò",
+     "share": 0.5,
+     "owner": "QA1",
+     "status": null,
+     "hours": 16
+    }
+   ],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0105",
+   "epic": "E01",
+   "title": "Luồng maker-checker dùng chung (approval_request)",
+   "spec": "FT-01-04; ADR-008; NFR-SEC-02",
+   "lab1": "FT-01-04",
+   "S": 3,
+   "C": 3,
+   "owner": "BE3",
+   "sprint": 2,
+   "status": "Todo",
+   "dod": "Người duyệt ≠ người lập bị chặn ở API và DB (CHECK); có audit",
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0106",
+   "epic": "E01",
+   "title": "Audit append-only có hash chain + correlationId; thu hồi UPDATE/DELETE của role ứng dụng",
+   "spec": "FT-01-06; NFR-AUD-01; ADR-002; T-22; G-22",
+   "lab1": "FT-01-06",
+   "S": 3,
+   "C": 4,
+   "owner": "BE2",
+   "sprint": 1,
+   "status": "Done",
+   "dod": "UPDATE/DELETE bảng [APPEND] bằng role ứng dụng → permission denied; hash chain kiểm được",
+   "subs": [
+    [
+     "Role DB, trigger chặn UPDATE/DELETE bảng append-only",
+     0.5,
+     "BE2",
+     "Done"
+    ],
+    [
+     "Middleware correlationId + ghi audit_event có hash chain",
+     0.5,
+     "BE2",
+     "Done"
+    ]
+   ],
+   "cEff": 4,
+   "swpSkill": 8,
+   "swp": 8,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 32,
+   "k": 1.0,
+   "subIssues": [
+    {
+     "title": "Role DB, trigger chặn UPDATE/DELETE bảng append-only",
+     "share": 0.5,
+     "owner": "BE2",
+     "status": "Done",
+     "hours": 16
+    },
+    {
+     "title": "Middleware correlationId + ghi audit_event có hash chain",
+     "share": 0.5,
+     "owner": "BE2",
+     "status": "Done",
+     "hours": 16
+    }
+   ],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0107",
+   "epic": "E01",
+   "title": "Middleware Idempotency-Key + định dạng lỗi chung {code, message, details[]}",
+   "spec": "architecture.md §6",
+   "lab1": "PLATFORM",
+   "S": 2,
+   "C": 3,
+   "owner": "BE3",
+   "sprint": 1,
+   "status": "Done",
+   "dod": "Thiếu key → 400; cùng key khác payload → 409; gửi lại → response cũ",
+   "cEff": 3,
+   "swpSkill": 3,
+   "swp": 3,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 12,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0108",
+   "epic": "E01",
+   "title": "Worker outbox gửi email (cảnh báo, duyệt), retry 5 lần",
+   "spec": "FT-01-07; IF-MAIL-01",
+   "lab1": "FT-01-07",
+   "S": 2,
+   "C": 2,
+   "owner": "BE3",
+   "sprint": 3,
+   "status": "Todo",
+   "dod": "Mail lỗi được gửi lại tối đa 5 lần; không gửi trùng",
+   "cEff": 2,
+   "swpSkill": 2,
+   "swp": 2,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 8,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0109",
+   "epic": "E01",
+   "title": "Chế độ thiết bị dùng chung, trang chủ hàng đợi theo vai trò, thời hạn lưu/legal hold",
+   "spec": "FT-01-05, FT-01-08, FT-01-09 (chưa có spec chi tiết)",
+   "lab1": "FT-01-05,FT-01-08,FT-01-09",
+   "S": 4,
+   "C": 2,
+   "owner": "FE1",
+   "status": "Todo",
+   "needsDesign": true,
+   "dod": "Spec màn được duyệt trước; phiên dùng chung tự khóa; purge cần duyệt",
+   "cEff": 2,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "Giữ 5. Gộp 3 tính năng nhỏ chưa có spec (FT-01-05/08/09) làm chỗ giữ effort; sẽ tách 3 issue khi spec được duyệt. Không xếp sprint.",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": "R3 chấm lệch |S−C| ≥ 2"
+  },
+  {
+   "key": "I-0201",
+   "epic": "E02",
+   "title": "Master SKU, vị trí, NCC, thiết bị + sửa seed theo RFP R-01/R-02",
+   "spec": "FT-02-01, FT-02-03, FT-02-04, FT-02-05; G-01, G-02, G-07, G-23, G-32",
+   "lab1": "FT-02-01,FT-02-03,FT-02-04,FT-02-05",
+   "S": 4,
+   "C": 2,
+   "owner": "BE1",
+   "sprint": 2,
+   "status": "Todo",
+   "dod": "Seed CHI-001 = bò 消費期限 mã 10 số, AMB-001 = gạo; không có vị trí A-Q; Đông không có cận dưới",
+   "cEff": 2,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "Giữ 5. 4 master CRUD đơn giản (C2) nhưng phải sửa seed theo R-01/R-02 (G-01/02/07/23/32): S4 đúng.",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": "R3 chấm lệch |S−C| ≥ 2"
+  },
+  {
+   "key": "I-0202",
+   "epic": "E02",
+   "title": "Master xe (ngăn theo vùng nhiệt) và tài xế (dữ liệu cá nhân tối thiểu)",
+   "spec": "FT-02-08; erd.md vehicle, vehicle_compartment, driver; DR-PRIV-01",
+   "lab1": "FT-02-08",
+   "S": 2,
+   "C": 2,
+   "owner": "BE3",
+   "sprint": 2,
+   "status": "Todo",
+   "dod": "Xe có ≥1 ngăn gắn vùng nhiệt; tài xế chỉ lưu mã, tên hiển thị",
+   "cEff": 2,
+   "swpSkill": 2,
+   "swp": 2,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 8,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0203",
+   "epic": "E02",
+   "title": "Vòng đời master created → review → active → retired qua maker-checker",
+   "spec": "FT-02-09; DR-MST-01",
+   "lab1": "FT-02-09",
+   "S": 3,
+   "C": 3,
+   "owner": "BE1",
+   "sprint": 3,
+   "status": "Todo",
+   "dod": "Bản ghi chưa active không dùng được ở nghiệp vụ; duyệt khác người lập",
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0204",
+   "epic": "E02",
+   "title": "PolicyResolver.effectiveAt(t) + exclusion constraint không chồng lấn hiệu lực",
+   "spec": "ADR-003; F02 technical-spec Algorithms; T-01",
+   "lab1": "FT-02-06",
+   "S": 2,
+   "C": 4,
+   "owner": "BE3",
+   "sprint": 1,
+   "status": "Done",
+   "dod": "Bản hiệu lực ngày mai không đổi phán định hôm nay; 2 version chồng lấn bị DB từ chối",
+   "cEff": 4,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "Giữ 5. Scope nhỏ nhưng exclusion constraint tstzrange + quy tắc không hồi tố khó test: C4 đúng.",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": "R3 chấm lệch |S−C| ≥ 2"
+  },
+  {
+   "key": "I-0205",
+   "epic": "E02",
+   "title": "SCR-016 phiên bản chính sách nhiệt theo dải (QA lập, QA khác duyệt)",
+   "spec": "SCR016_TempPolicyVersion; wireframes/SCR016; BR-TEMP-01; T-01",
+   "lab1": "FT-02-06",
+   "S": 3,
+   "C": 3,
+   "oq": "OQ-26, OQ-45",
+   "oqMode": "CFG",
+   "owner": "FE1",
+   "sprint": 2,
+   "status": "Todo",
+   "dod": "Đủ trạng thái wireframe; Đông chỉ có cận trên; người duyệt ≠ người lập",
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0206",
+   "epic": "E02",
+   "title": "Hợp đồng KH–SKU có version, trạng thái BUSINESS_REVIEW",
+   "spec": "FT-02-02; DISC-022; US-473; G-20",
+   "lab1": "FT-02-02",
+   "S": 3,
+   "C": 3,
+   "oq": "OQ-03, OQ-04, OQ-44",
+   "oqMode": "CFG",
+   "owner": "BE1",
+   "sprint": 2,
+   "status": "Todo",
+   "dod": "AGR-008 ở BUSINESS_REVIEW → window_rule NULL; cặp không có hợp đồng không tạo được dòng đơn",
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0207",
+   "epic": "E02",
+   "title": "Master mã lý do / mã ngoại lệ",
+   "spec": "FT-02-10",
+   "lab1": "FT-02-10",
+   "S": 1,
+   "C": 2,
+   "owner": "BE3",
+   "sprint": 2,
+   "status": "Todo",
+   "dod": "Mã lý do ROUTE_CHANGE, nhập tay, cách ly dùng chung một bảng",
+   "cEff": 2,
+   "swpSkill": 1,
+   "swp": 1,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 4,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0301",
+   "epic": "E03",
+   "title": "SCR-021 kiểm nhập từng dòng: trường P0, nhiệt đo, đánh giá BR-TEMP-02",
+   "spec": "SCR021_InboundInspection; FT-03-02; US-01; T-02; G-08",
+   "lab1": "FT-03-02,FT-04-06",
+   "S": 4,
+   "C": 4,
+   "oq": "OQ-13",
+   "oqMode": "CFG",
+   "owner": "BE1",
+   "sprint": 3,
+   "status": "Todo",
+   "dod": "5.1℃ hàng Mát → QUARANTINED; inbound_inspection append-only có attempt_no",
+   "subs": [
+    [
+     "API kiểm nhập + temperature-evaluator",
+     0.3,
+     "BE1"
+    ],
+    [
+     "Lưu lần kiểm append-only (attempt_no)",
+     0.2,
+     "BE1"
+    ],
+    [
+     "UI SCR-021 đủ trạng thái wireframe",
+     0.3,
+     "FE1"
+    ],
+    [
+     "Test tích hợp kiểm nhập",
+     0.2,
+     "QA1"
+    ]
+   ],
+   "cEff": 4,
+   "swpSkill": 13,
+   "swp": 13,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 52,
+   "k": 1.0,
+   "subIssues": [
+    {
+     "title": "API kiểm nhập + temperature-evaluator",
+     "share": 0.3,
+     "owner": "BE1",
+     "status": null,
+     "hours": 16
+    },
+    {
+     "title": "Lưu lần kiểm append-only (attempt_no)",
+     "share": 0.2,
+     "owner": "BE1",
+     "status": null,
+     "hours": 10
+    },
+    {
+     "title": "UI SCR-021 đủ trạng thái wireframe",
+     "share": 0.3,
+     "owner": "FE1",
+     "status": null,
+     "hours": 16
+    },
+    {
+     "title": "Test tích hợp kiểm nhập",
+     "share": 0.2,
+     "owner": "QA1",
+     "status": null,
+     "hours": 10
+    }
+   ],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0302",
+   "epic": "E03",
+   "title": "Tự động cách ly khi lỗi nhiệt hoặc thiếu truy xuất",
+   "spec": "FT-03-05; FR-REC-05; T-03; DSG-REC-02",
+   "lab1": "FT-03-05",
+   "S": 3,
+   "C": 3,
+   "oq": "OQ-13, OQ-14, OQ-59",
+   "oqMode": "CFG",
+   "owner": "BE1",
+   "status": "Todo",
+   "dod": "Mã bò 9 số → lô QUARANTINE có quarantine_case; lỗi nhiệt vẫn cách ly khi kiểm lại",
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0303",
+   "epic": "E03",
+   "title": "Kiểm mã cá thể bò 10 số và xuất xứ gạo",
+   "spec": "FT-03-07; BR-TRACE-01/02",
+   "lab1": "FT-03-07",
+   "S": 2,
+   "C": 2,
+   "oq": "OQ-59",
+   "oqMode": "CFG",
+   "owner": "BE1",
+   "status": "Todo",
+   "dod": "Sai định dạng → chặn hoặc cách ly theo cấu hình OQ-59",
+   "cEff": 2,
+   "swpSkill": 2,
+   "swp": 2,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 8,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0304",
+   "epic": "E03",
+   "title": "Lệch số lượng nhận/từ chối/chờ + duyệt lệch maker-checker",
+   "spec": "FT-03-03; US-410; PERM003",
+   "lab1": "FT-03-03",
+   "S": 3,
+   "C": 3,
+   "oq": "OQ-12, OQ-52",
+   "oqMode": "CFG",
+   "owner": "BE3",
+   "status": "Todo",
+   "dod": "Mọi lệch vượt dung sai cấu hình cần WHL/QA khác người duyệt",
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0305",
+   "epic": "E03",
+   "title": "SCR-022 xác nhận nhập: tạo lô bất biến idempotent, đặt đúng vị trí, in nhãn GS1-128",
+   "spec": "SCR022_InboundConfirm; FT-03-04; US-411",
+   "lab1": "FT-03-04",
+   "S": 3,
+   "C": 4,
+   "oq": "OQ-15, OQ-18",
+   "oqMode": "STUB",
+   "owner": "BE1",
+   "status": "Todo",
+   "dod": "Gửi 2 lần → 1 lô; trùng số lô NCC → LOT_NO_CONFLICT (STUB OQ-15)",
+   "subs": [
+    [
+     "API tạo lô idempotent + LOT_NO_CONFLICT (STUB OQ-15)",
+     0.4,
+     "BE1"
+    ],
+    [
+     "UI SCR-022 + in nhãn GS1-128",
+     0.35,
+     "FE1"
+    ],
+    [
+     "Test xác nhận nhập gửi lại 2 lần",
+     0.25,
+     "QA1"
+    ]
+   ],
+   "cEff": 4,
+   "swpSkill": 8,
+   "swp": 8,
+   "reviewNote": "Giữ 8. STUB OQ-15 (trùng số lô) nên k=1.25 là hợp lý. Đã tách 3 sub-issue theo flag SUB-BIG.",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 40,
+   "k": 1.25,
+   "subIssues": [
+    {
+     "title": "API tạo lô idempotent + LOT_NO_CONFLICT (STUB OQ-15)",
+     "share": 0.4,
+     "owner": "BE1",
+     "status": null,
+     "hours": 16
+    },
+    {
+     "title": "UI SCR-022 + in nhãn GS1-128",
+     "share": 0.35,
+     "owner": "FE1",
+     "status": null,
+     "hours": 14
+    },
+    {
+     "title": "Test xác nhận nhập gửi lại 2 lần",
+     "share": 0.25,
+     "owner": "QA1",
+     "status": null,
+     "hours": 10
+    }
+   ],
+   "flags": [],
+   "sampleReason": "R1 flag: SUB-BIG"
+  },
+  {
+   "key": "I-0306",
+   "epic": "E03",
+   "title": "[Thiết kế] Spec SCR-020 hẹn nhập và SCR-023 vùng nhiệt tạm thời",
+   "spec": "FT-03-01, FT-03-06; feature-list.md khoảng trống",
+   "lab1": "FT-03-01,FT-03-06",
+   "S": 2,
+   "C": 2,
+   "oq": "OQ-63",
+   "oqMode": "BLOCK",
+   "type": "design",
+   "owner": "BrSE",
+   "status": "Todo",
+   "dod": "Spec + wireframe 2 màn được review; OQ-63 có câu trả lời",
+   "cEff": 2,
+   "swpSkill": 2,
+   "swp": 2,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 10,
+   "k": 1.25,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0401",
+   "epic": "E04",
+   "title": "Máy trạng thái lô + sổ tồn stock_balance/inventory_movement",
+   "spec": "FT-04-02, FT-04-03; US-422; G-09",
+   "lab1": "FT-04-02,FT-04-03",
+   "S": 4,
+   "C": 4,
+   "owner": "BE2",
+   "sprint": 2,
+   "status": "Todo",
+   "dod": "Chuyển trạng thái sai bị chặn; tồn âm bị chặn; lô ở nhiều vị trí",
+   "subs": [
+    [
+     "Máy trạng thái lô + lot_status_event",
+     0.25,
+     "BE2"
+    ],
+    [
+     "Sổ inventory_movement",
+     0.25,
+     "BE2"
+    ],
+    [
+     "stock_balance theo (lô, vị trí), chặn tồn âm",
+     0.25,
+     "BE2"
+    ],
+    [
+     "Test chuyển trạng thái & tồn âm",
+     0.25,
+     "QA1"
+    ]
+   ],
+   "cEff": 4,
+   "swpSkill": 13,
+   "swp": 13,
+   "reviewNote": "Giữ 13. Sổ tồn là nền cho F05/F06; đã tách 4 sub-issue ≤ 13h theo flag SUB-BIG.",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 52,
+   "k": 1.0,
+   "subIssues": [
+    {
+     "title": "Máy trạng thái lô + lot_status_event",
+     "share": 0.25,
+     "owner": "BE2",
+     "status": null,
+     "hours": 13
+    },
+    {
+     "title": "Sổ inventory_movement",
+     "share": 0.25,
+     "owner": "BE2",
+     "status": null,
+     "hours": 13
+    },
+    {
+     "title": "stock_balance theo (lô, vị trí), chặn tồn âm",
+     "share": 0.25,
+     "owner": "BE2",
+     "status": null,
+     "hours": 13
+    },
+    {
+     "title": "Test chuyển trạng thái & tồn âm",
+     "share": 0.25,
+     "owner": "QA1",
+     "status": null,
+     "hours": 13
+    }
+   ],
+   "flags": [],
+   "sampleReason": "R1 flag: SUB-BIG"
+  },
+  {
+   "key": "I-0402",
+   "epic": "E04",
+   "title": "SCR-034 phán định cách ly RELEASE/SCRAP có căn cứ, bằng chứng, maker-checker",
+   "spec": "SCR034_QuarantineJudgement; US-03; T-05; G-12",
+   "lab1": "FT-04-03",
+   "S": 3,
+   "C": 3,
+   "oq": "OQ-17, OQ-53",
+   "oqMode": "CFG",
+   "owner": "FE1",
+   "status": "Todo",
+   "dod": "Người mở tự phán định → 403 và DB từ chối",
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0403",
+   "epic": "E04",
+   "title": "Quy tắc vị trí cách ly: -Q cho Mát/Đông, giữ chỗ + nhãn HOLD cho vùng Thường",
+   "spec": "DSG-QUA-01; T-04",
+   "lab1": "FT-04-03",
+   "S": 2,
+   "C": 3,
+   "oq": "OQ-16, OQ-48",
+   "oqMode": "CFG",
+   "owner": "BE2",
+   "status": "Todo",
+   "dod": "Lô Thường cách ly giữ vị trí có HOLD; lô Mát vào C-Q-01",
+   "cEff": 3,
+   "swpSkill": 3,
+   "swp": 3,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 12,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0404",
+   "epic": "E04",
+   "title": "Hủy phân bổ chưa lên xe khi lô bị cách ly sau phân bổ",
+   "spec": "DSG-QUA-03; T-11c; G-33",
+   "lab1": "FT-04-03",
+   "S": 3,
+   "C": 3,
+   "oq": "OQ-10",
+   "oqMode": "CFG",
+   "owner": "BE2",
+   "status": "Todo",
+   "dod": "Alarm cách ly lô PLANNED → allocation CANCELLED, qty trả lại, có cảnh báo DSP",
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0405",
+   "epic": "E04",
+   "title": "Gợi ý vị trí cất hàng và tra cứu tồn kho",
+   "spec": "FT-04-01, FT-04-05",
+   "lab1": "FT-04-01,FT-04-05",
+   "S": 3,
+   "C": 2,
+   "owner": "FE1",
+   "status": "Todo",
+   "needsDesign": true,
+   "dod": "Chỉ gợi ý vị trí cùng vùng nhiệt còn sức chứa",
+   "cEff": 2,
+   "swpSkill": 3,
+   "swp": 3,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 12,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0406",
+   "epic": "E04",
+   "title": "[Thiết kế] Kiểm kê mù và duyệt điều chỉnh 2 bước (SCR-035…037)",
+   "spec": "FT-04-04; FR-INV-04",
+   "lab1": "FT-04-04",
+   "S": 2,
+   "C": 2,
+   "oq": "OQ-62",
+   "oqMode": "BLOCK",
+   "type": "design",
+   "owner": "BrSE",
+   "status": "Todo",
+   "dod": "Spec 3 màn được review; OQ-62 có câu trả lời",
+   "cEff": 2,
+   "swpSkill": 2,
+   "swp": 2,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 10,
+   "k": 1.25,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0501",
+   "epic": "E05",
+   "title": "Port @ycl/rules expiry + deliveryWindow + dateReversal từ prototype, sửa G-03/04/06/25",
+   "spec": "FT-05-02, FT-05-03, FT-05-04; T-06/T-07/T-08; ALG-502/503",
+   "lab1": "FT-05-02,FT-05-03,FT-05-04",
+   "S": 4,
+   "C": 4,
+   "oq": "OQ-01, OQ-02, OQ-05, OQ-57",
+   "oqMode": "CFG",
+   "owner": "BE1",
+   "sprint": 1,
+   "status": "In Progress",
+   "dod": "Ví dụ RFP CUS-003 CHI-002 chặn lô 2026-09-18; 消費 = ngày giao → loại #1",
+   "subs": [
+    [
+     "Expiry 消費/賞味 so delivery_date (G-04)",
+     0.25,
+     "BE1",
+     "Done"
+    ],
+    [
+     "deliveryWindow 1/3·1/2 dùng hạn thực của lô (G-25, G-06)",
+     0.25,
+     "BE1",
+     "Done"
+    ],
+    [
+     "dateReversal baseline cùng KH–SKU (IN_TRANSIT + ACCEPTED)",
+     0.25,
+     "BE1",
+     "In Progress"
+    ],
+    [
+     "Test ví dụ RFP (CUS-003/CHI-002, AGR-008)",
+     0.25,
+     "QA1",
+     "Todo"
+    ]
+   ],
+   "cEff": 4,
+   "swpSkill": 13,
+   "swp": 13,
+   "reviewNote": "Giữ 13. Port từ prototype nhưng phải sửa 4 lỗi G-03/04/06/25; đã tách 4 sub-issue theo flag.",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 52,
+   "k": 1.0,
+   "subIssues": [
+    {
+     "title": "Expiry 消費/賞味 so delivery_date (G-04)",
+     "share": 0.25,
+     "owner": "BE1",
+     "status": "Done",
+     "hours": 13
+    },
+    {
+     "title": "deliveryWindow 1/3·1/2 dùng hạn thực của lô (G-25, G-06)",
+     "share": 0.25,
+     "owner": "BE1",
+     "status": "Done",
+     "hours": 13
+    },
+    {
+     "title": "dateReversal baseline cùng KH–SKU (IN_TRANSIT + ACCEPTED)",
+     "share": 0.25,
+     "owner": "BE1",
+     "status": "In Progress",
+     "hours": 13
+    },
+    {
+     "title": "Test ví dụ RFP (CUS-003/CHI-002, AGR-008)",
+     "share": 0.25,
+     "owner": "QA1",
+     "status": "Todo",
+     "hours": 13
+    }
+   ],
+   "flags": [],
+   "sampleReason": "R1 flag: SUB-BIG"
+  },
+  {
+   "key": "I-0502",
+   "epic": "E05",
+   "title": "Pipeline loại trừ 5 bước cố định rồi FEFO/FIFO",
+   "spec": "DSG-ALLOC-01; BR-FEFO-01; T-09",
+   "lab1": "FT-05-05",
+   "S": 3,
+   "C": 3,
+   "owner": "BE1",
+   "sprint": 2,
+   "status": "Todo",
+   "dod": "Lô vi phạm #1 và #5 ghi #1; cùng hạn → nhập trước được chọn",
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0503",
+   "epic": "E05",
+   "title": "Phân bổ nguyên tử 1 transaction/lần chạy, khóa dòng theo thứ tự",
+   "spec": "ADR-004; FR-OUT-02; T-10; G-05, G-10",
+   "lab1": "FT-05-05",
+   "S": 3,
+   "C": 4,
+   "owner": "BE2",
+   "sprint": 2,
+   "status": "Todo",
+   "dod": "20 request song song, tồn 100 → tổng phân bổ ≤ 100; run cũ SUPERSEDED, không xóa",
+   "subs": [
+    [
+     "Transaction + khóa dòng + run SUPERSEDED",
+     0.5,
+     "BE2"
+    ],
+    [
+     "Test đồng thời 20 request",
+     0.5,
+     "QA1"
+    ]
+   ],
+   "cEff": 4,
+   "swpSkill": 8,
+   "swp": 8,
+   "reviewNote": "Giữ 8. Đã chia lại sub-issue 50/50 (test đồng thời tốn ngang phần code).",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 32,
+   "k": 1.0,
+   "subIssues": [
+    {
+     "title": "Transaction + khóa dòng + run SUPERSEDED",
+     "share": 0.5,
+     "owner": "BE2",
+     "status": null,
+     "hours": 16
+    },
+    {
+     "title": "Test đồng thời 20 request",
+     "share": 0.5,
+     "owner": "QA1",
+     "status": null,
+     "hours": 16
+    }
+   ],
+   "flags": [],
+   "sampleReason": "R1 flag: SUB-BIG"
+  },
+  {
+   "key": "I-0504",
+   "epic": "E05",
+   "title": "SCR-042 kết quả phân bổ, lý do loại trừ, phân bổ lại",
+   "spec": "SCR042_AllocationResult; FT-05-06",
+   "lab1": "FT-05-06",
+   "S": 3,
+   "C": 3,
+   "owner": "FE1",
+   "sprint": 3,
+   "status": "Todo",
+   "dod": "Hiện đủ trạng thái wireframe; UI ghi 契約ルール（hợp đồng）",
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0505",
+   "epic": "E05",
+   "title": "Quyết định thiếu hàng: chờ hàng hoặc giao phần có + backorder",
+   "spec": "DSG-ALLOC-04; US-402",
+   "lab1": "FT-05-05",
+   "S": 2,
+   "C": 3,
+   "oq": "OQ-07, OQ-08",
+   "oqMode": "STUB",
+   "owner": "BE1",
+   "status": "Todo",
+   "dod": "Không tự giao một phần; backorder bắt buộc lý do; nhánh đơn con chờ OQ-08",
+   "cEff": 3,
+   "swpSkill": 3,
+   "swp": 3,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 15,
+   "k": 1.25,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0506",
+   "epic": "E05",
+   "title": "Tạo đơn trên màn hình + import CSV, kiểm trùng, mốc 16:00",
+   "spec": "FT-05-01; SCR-040/041 (mức List)",
+   "lab1": "FT-05-01",
+   "S": 3,
+   "C": 3,
+   "oq": "OQ-40",
+   "oqMode": "CFG",
+   "owner": "FE1",
+   "status": "Todo",
+   "needsDesign": true,
+   "dod": "Đơn sau 16:00 sang ngày xuất kế tiếp; trùng mã tham chiếu bị từ chối",
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0601",
+   "epic": "E06",
+   "title": "SCR-051 quét PICK/LOAD, kiểm lại G2/G3 theo lô thực quét",
+   "spec": "SCR051_PickLoadScan; FT-06-02; T-11; G-14, G-27",
+   "lab1": "FT-06-02",
+   "S": 4,
+   "C": 4,
+   "oq": "OQ-19",
+   "oqMode": "CFG",
+   "owner": "BE3",
+   "status": "Todo",
+   "dod": "Quét đúng lô vẫn kiểm 消費/đảo ngày; LOAD sai ngăn vùng nhiệt → BLOCKED",
+   "subs": [
+    [
+     "API scan_event G2/G3 + nhập tay có lý do",
+     0.3,
+     "BE3"
+    ],
+    [
+     "Chế độ LOAD kiểm ngăn xe",
+     0.2,
+     "BE3"
+    ],
+    [
+     "UI SCR-051 cho máy quét Android",
+     0.25,
+     "FE1"
+    ],
+    [
+     "Test quét sai/đúng",
+     0.25,
+     "QA1"
+    ]
+   ],
+   "cEff": 4,
+   "swpSkill": 13,
+   "swp": 13,
+   "reviewNote": "Giữ 13. Màn quét 2 chế độ + kiểm lại G2/G3; đã chỉnh tỉ lệ sub-issue để mỗi sub ≤ 16h.",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 52,
+   "k": 1.0,
+   "subIssues": [
+    {
+     "title": "API scan_event G2/G3 + nhập tay có lý do",
+     "share": 0.3,
+     "owner": "BE3",
+     "status": null,
+     "hours": 16
+    },
+    {
+     "title": "Chế độ LOAD kiểm ngăn xe",
+     "share": 0.2,
+     "owner": "BE3",
+     "status": null,
+     "hours": 10
+    },
+    {
+     "title": "UI SCR-051 cho máy quét Android",
+     "share": 0.25,
+     "owner": "FE1",
+     "status": null,
+     "hours": 13
+    },
+    {
+     "title": "Test quét sai/đúng",
+     "share": 0.25,
+     "owner": "QA1",
+     "status": null,
+     "hours": 13
+    }
+   ],
+   "flags": [],
+   "sampleReason": "R1 flag: SUB-BIG"
+  },
+  {
+   "key": "I-0602",
+   "epic": "E06",
+   "title": "SCR-053 kiểm trước xuất theo chuyến: nhiệt ngăn, nhiệt hàng, seal",
+   "spec": "SCR053_PreShipCheck; FR-OUT-05; T-12; G-15",
+   "lab1": "FT-06-03",
+   "S": 3,
+   "C": 3,
+   "oq": "OQ-37, OQ-55, OQ-61",
+   "oqMode": "CFG",
+   "owner": "FE1",
+   "status": "Todo",
+   "dod": "Thiếu seal → không xác nhận được; kết quả hết hạn sau 60 phút (CFG)",
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0603",
+   "epic": "E06",
+   "title": "Xác nhận xuất G4: đọc mốc trong transaction, khóa theo (customer_id, sku_id)",
+   "spec": "ALG-603, ALG-605; ADR-005; G-28, G-29",
+   "lab1": "FT-06-04",
+   "S": 3,
+   "C": 4,
+   "owner": "BE2",
+   "status": "Todo",
+   "dod": "Giữa G1 và G4 có lô mới hơn vừa giao → chặn; 2 đơn cùng cặp không lọt đảo ngày",
+   "subs": [
+    [
+     "Transaction G4 + khóa cặp KH–SKU",
+     0.5,
+     "BE2"
+    ],
+    [
+     "Test đồng thời 2 đơn cùng cặp",
+     0.5,
+     "QA1"
+    ]
+   ],
+   "cEff": 4,
+   "swpSkill": 8,
+   "swp": 8,
+   "reviewNote": "Giữ 8. Đã chia sub 50/50.",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 32,
+   "k": 1.0,
+   "subIssues": [
+    {
+     "title": "Transaction G4 + khóa cặp KH–SKU",
+     "share": 0.5,
+     "owner": "BE2",
+     "status": null,
+     "hours": 16
+    },
+    {
+     "title": "Test đồng thời 2 đơn cùng cặp",
+     "share": 0.5,
+     "owner": "QA1",
+     "status": null,
+     "hours": 16
+    }
+   ],
+   "flags": [],
+   "sampleReason": "R1 flag: SUB-BIG"
+  },
+  {
+   "key": "I-0604",
+   "epic": "E06",
+   "title": "Dỡ đơn bị chặn ở G4, tạo phiên bản tuyến mới để kiểm giờ lại",
+   "spec": "ALG-604; DSG-ALLOC-05; T-11b",
+   "lab1": "FT-06-04",
+   "S": 3,
+   "C": 4,
+   "oq": "OQ-09",
+   "oqMode": "STUB",
+   "constraintTouch": true,
+   "owner": "BE2",
+   "status": "Todo",
+   "dod": "Chặn 1 đơn → dỡ → DRAFT version+1 → kiểm giờ lái lại → công bố → đơn còn lại xuất được",
+   "subs": [
+    [
+     "Dỡ đơn + trả allocation",
+     0.2,
+     "BE2"
+    ],
+    [
+     "Tạo DRAFT version tuyến mới (G4_BLOCK)",
+     0.2,
+     "BE3"
+    ],
+    [
+     "Nối kiểm giờ lái + công bố lại",
+     0.2,
+     "BE2"
+    ],
+    [
+     "UI SCR-053 thao tác dỡ đơn",
+     0.2,
+     "FE1"
+    ],
+    [
+     "Test E2E dỡ đơn → kiểm giờ → xuất",
+     0.2,
+     "QA1"
+    ]
+   ],
+   "cEff": 4,
+   "swpSkill": 8,
+   "swp": 13,
+   "reviewNote": "Tăng S 3 → 4 (SWP 8 → 13). Skill chấm như việc nội bộ F06, nhưng dỡ đơn kéo theo tạo version tuyến mới và chạy lại kiểm giờ lái 2024 (xuyên outbound + routing-duty). Đã tách 5 sub-issue.",
+   "reviewS": 4,
+   "reviewC": null,
+   "hours": 65,
+   "k": 1.25,
+   "subIssues": [
+    {
+     "title": "Dỡ đơn + trả allocation",
+     "share": 0.2,
+     "owner": "BE2",
+     "status": null,
+     "hours": 13
+    },
+    {
+     "title": "Tạo DRAFT version tuyến mới (G4_BLOCK)",
+     "share": 0.2,
+     "owner": "BE3",
+     "status": null,
+     "hours": 13
+    },
+    {
+     "title": "Nối kiểm giờ lái + công bố lại",
+     "share": 0.2,
+     "owner": "BE2",
+     "status": null,
+     "hours": 13
+    },
+    {
+     "title": "UI SCR-053 thao tác dỡ đơn",
+     "share": 0.2,
+     "owner": "FE1",
+     "status": null,
+     "hours": 13
+    },
+    {
+     "title": "Test E2E dỡ đơn → kiểm giờ → xuất",
+     "share": 0.2,
+     "owner": "QA1",
+     "status": null,
+     "hours": 13
+    }
+   ],
+   "flags": [],
+   "sampleReason": "R1 flag: SUB-BIG"
+  },
+  {
+   "key": "I-0605",
+   "epic": "E06",
+   "title": "Gom task pick theo khu/tuyến/thứ tự xếp (SCR-050)",
+   "spec": "FT-06-01; FR-OUT-03 (SCR-050 mức List)",
+   "lab1": "FT-06-01",
+   "S": 2,
+   "C": 3,
+   "owner": "BE3",
+   "status": "Todo",
+   "needsDesign": true,
+   "dod": "Đổi task vẫn giữ phân bổ gốc",
+   "cEff": 3,
+   "swpSkill": 3,
+   "swp": 3,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 12,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0606",
+   "epic": "E06",
+   "title": "SCR-054 in phiếu xuất",
+   "spec": "FT-06-04; PREMISE LAB-4 C-2",
+   "lab1": "FT-06-04",
+   "S": 2,
+   "C": 2,
+   "owner": "FE1",
+   "status": "Todo",
+   "dod": "Phiếu in theo chuyến, có mã tuyến và version",
+   "cEff": 2,
+   "swpSkill": 2,
+   "swp": 2,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 8,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0701",
+   "epic": "E07",
+   "title": "Dựng tuyến theo ngày: gán đơn vào xe theo ngăn vùng nhiệt, danh sách chưa gán có lý do",
+   "spec": "ALG-801; FR-SCH-01; US-480; T-18",
+   "lab1": "FT-08-01",
+   "S": 4,
+   "C": 4,
+   "oq": "OQ-47, OQ-65",
+   "oqMode": "CFG",
+   "owner": "BE3",
+   "sprint": 3,
+   "status": "Todo",
+   "dod": "Đơn Đông + xe chỉ có ngăn Mát → ở danh sách chưa gán kèm lý do",
+   "subs": [
+    [
+     "Thuật toán gán đơn – xe – ngăn",
+     0.3,
+     "BE3"
+    ],
+    [
+     "API route-build-runs + unassigned-orders",
+     0.3,
+     "BE3"
+    ],
+    [
+     "Kiểm sức chứa ngăn + khung giờ khách",
+     0.2,
+     "BE3"
+    ],
+    [
+     "Test dựng tuyến",
+     0.2,
+     "QA1"
+    ]
+   ],
+   "cEff": 4,
+   "swpSkill": 13,
+   "swp": 13,
+   "reviewNote": "Giữ 13. Đã chỉnh tỉ lệ sub-issue.",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 52,
+   "k": 1.0,
+   "subIssues": [
+    {
+     "title": "Thuật toán gán đơn – xe – ngăn",
+     "share": 0.3,
+     "owner": "BE3",
+     "status": null,
+     "hours": 16
+    },
+    {
+     "title": "API route-build-runs + unassigned-orders",
+     "share": 0.3,
+     "owner": "BE3",
+     "status": null,
+     "hours": 16
+    },
+    {
+     "title": "Kiểm sức chứa ngăn + khung giờ khách",
+     "share": 0.2,
+     "owner": "BE3",
+     "status": null,
+     "hours": 10
+    },
+    {
+     "title": "Test dựng tuyến",
+     "share": 0.2,
+     "owner": "QA1",
+     "status": null,
+     "hours": 10
+    }
+   ],
+   "flags": [],
+   "sampleReason": "R1 flag: SUB-BIG"
+  },
+  {
+   "key": "I-0702",
+   "epic": "E07",
+   "title": "Adapter dịch vụ bản đồ + cache ước tính, cấm công bố khi ước tính > 24h",
+   "spec": "IF-MAP-01; DSG-ROUTE-01; P-10",
+   "lab1": "FT-12-02",
+   "S": 3,
+   "C": 3,
+   "oq": "OQ-35",
+   "oqMode": "STUB",
+   "owner": "TL",
+   "sprint": 3,
+   "status": "Todo",
+   "dod": "Timeout 3s dùng cache; ước tính cũ > 24h → MAP_ESTIMATE_STALE; có fake provider cho test",
+   "subs": [
+    [
+     "Interface adapter + fake provider",
+     0.5,
+     "TL"
+    ],
+    [
+     "Cache + kiểm 24h",
+     0.5,
+     "BE3"
+    ]
+   ],
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 25,
+   "k": 1.25,
+   "subIssues": [
+    {
+     "title": "Interface adapter + fake provider",
+     "share": 0.5,
+     "owner": "TL",
+     "status": null,
+     "hours": 12
+    },
+    {
+     "title": "Cache + kiểm 24h",
+     "share": 0.5,
+     "owner": "BE3",
+     "status": null,
+     "hours": 13
+    }
+   ],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0703",
+   "epic": "E07",
+   "title": "SCR-060 danh sách điểm giao: kéo thả, đổi xe, tính lại giờ đến",
+   "spec": "SCR060_RoutePlanning (phần stop); wireframes/SCR060",
+   "lab1": "FT-08-01",
+   "S": 4,
+   "C": 4,
+   "owner": "FE1",
+   "sprint": 3,
+   "status": "Todo",
+   "dod": "Kéo thả đổi thứ tự → ETA tính lại; route về DRAFT",
+   "subs": [
+    [
+     "Danh sách stop kéo thả",
+     0.3,
+     "FE1"
+    ],
+    [
+     "Đổi xe/tài xế + chặn trùng tài nguyên (L7)",
+     0.25,
+     "FE1"
+    ],
+    [
+     "API PUT stops + tính lại ETA",
+     0.25,
+     "BE3"
+    ],
+    [
+     "Test UI SCR-060 phần stop",
+     0.2,
+     "QA1"
+    ]
+   ],
+   "cEff": 4,
+   "swpSkill": 13,
+   "swp": 13,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 52,
+   "k": 1.0,
+   "subIssues": [
+    {
+     "title": "Danh sách stop kéo thả",
+     "share": 0.3,
+     "owner": "FE1",
+     "status": null,
+     "hours": 16
+    },
+    {
+     "title": "Đổi xe/tài xế + chặn trùng tài nguyên (L7)",
+     "share": 0.25,
+     "owner": "FE1",
+     "status": null,
+     "hours": 13
+    },
+    {
+     "title": "API PUT stops + tính lại ETA",
+     "share": 0.25,
+     "owner": "BE3",
+     "status": null,
+     "hours": 13
+    },
+    {
+     "title": "Test UI SCR-060 phần stop",
+     "share": 0.2,
+     "owner": "QA1",
+     "status": null,
+     "hours": 10
+    }
+   ],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0704",
+   "epic": "E07",
+   "title": "Vòng đời tuyến SM-801: revision, hủy có lý do, SUPERSEDED",
+   "spec": "SM-801; DEC-803; FR-SCH-04 (phần version)",
+   "lab1": "FT-08-04",
+   "S": 3,
+   "C": 3,
+   "oq": "OQ-34",
+   "oqMode": "CFG",
+   "constraintTouch": true,
+   "owner": "BE3",
+   "status": "Todo",
+   "dod": "Sửa tuyến PUBLISHED → DRAFT version+1; bản cũ giữ cho tài xế đến khi bản mới công bố",
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0705",
+   "epic": "E07",
+   "title": "Màn xem tuyến cho WHL: chỉ mã tài xế, ẩn giờ làm",
+   "spec": "DEC-802; US-486; DR-PRIV-01",
+   "lab1": "FT-08-01",
+   "S": 2,
+   "C": 2,
+   "owner": "FE1",
+   "status": "Todo",
+   "dod": "WHL không thấy panel giờ lái và số tháng/năm",
+   "cEff": 2,
+   "swpSkill": 2,
+   "swp": 2,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 8,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0801",
+   "epic": "E08",
+   "title": "SCR-017 bộ quy tắc giờ ràng buộc có version: 8 tham số DUTY-*, cờ verified_by_legal",
+   "spec": "SCR017_DutyRuleSetVersion; FT-02-07; DISC-023; US-471; T-14",
+   "lab1": "FT-02-07",
+   "S": 3,
+   "C": 3,
+   "legal": true,
+   "oq": "OQ-33, OQ-36",
+   "oqMode": "CFG",
+   "owner": "TL",
+   "sprint": 1,
+   "status": "Done",
+   "dod": "Version chưa xác minh pháp lý → banner trên SCR-017 và SCR-060; 8 mã tham số đủ",
+   "subs": [
+    [
+     "API + danh mục tham số duty_rule_param",
+     0.5,
+     "TL",
+     "Done"
+    ],
+    [
+     "UI SCR-017 + banner chưa xác minh",
+     0.5,
+     "FE1",
+     "Done"
+    ]
+   ],
+   "cEff": 4,
+   "swpSkill": 8,
+   "swp": 8,
+   "reviewNote": "Giữ 8. +1 pháp lý đúng: 8 tham số DUTY-* và cờ verified_by_legal là chỗ duy nhất giữ giá trị luật.",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 32,
+   "k": 1.0,
+   "subIssues": [
+    {
+     "title": "API + danh mục tham số duty_rule_param",
+     "share": 0.5,
+     "owner": "TL",
+     "status": "Done",
+     "hours": 16
+    },
+    {
+     "title": "UI SCR-017 + banner chưa xác minh",
+     "share": 0.5,
+     "owner": "FE1",
+     "status": "Done",
+     "hours": 16
+    }
+   ],
+   "flags": [],
+   "sampleReason": "R2 ràng buộc pháp lý, SWP ≥ 8"
+  },
+  {
+   "key": "I-0802",
+   "epic": "E08",
+   "title": "[Làm rõ] Xác minh nguồn 改善基準告示 và chốt OQ-28/29/30/58 với khách",
+   "spec": "OPS-LAW-01; open-questions OQ-28, OQ-29, OQ-30, OQ-58",
+   "lab1": "FT-08-02",
+   "S": 2,
+   "C": 3,
+   "oq": "OQ-28, OQ-29, OQ-30, OQ-58",
+   "oqMode": "BLOCK",
+   "type": "clarify",
+   "owner": "BrSE",
+   "sprint": 1,
+   "status": "Blocked",
+   "dod": "Có văn bản trả lời của khách cho 4 OQ; người phía khách chịu trách nhiệm xác minh pháp lý được nêu tên",
+   "cEff": 3,
+   "swpSkill": 3,
+   "swp": 3,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 15,
+   "k": 1.25,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0803",
+   "epic": "E08",
+   "title": "Mô hình timeline tài xế: ngày = 24h từ đầu ca, gộp giờ thực tế + tuyến đã công bố khác",
+   "spec": "DSG-DUTY-03; ADR-006; business-rules §E",
+   "lab1": "FT-08-02",
+   "S": 3,
+   "C": 4,
+   "legal": true,
+   "oq": "OQ-29, OQ-46",
+   "oqMode": "CFG",
+   "owner": "BE2",
+   "sprint": 1,
+   "status": "In Progress",
+   "dod": "Tuyến qua đêm chia đúng ngày; nhiều tuyến/ngày được gộp; thiếu actual D−1 → WARN",
+   "subs": [
+    [
+     "Model hoạt động DRIVE/BREAK/REST/WORK/WAIT",
+     0.25,
+     "BE2",
+     "Done"
+    ],
+    [
+     "Chia ngày theo đầu ca, tuyến qua đêm",
+     0.25,
+     "BE2",
+     "In Progress"
+    ],
+    [
+     "Gộp actual + tuyến PUBLISHED cùng tài xế",
+     0.25,
+     "BE2",
+     "Todo"
+    ],
+    [
+     "Test timeline biên ngày/tháng",
+     0.25,
+     "QA1",
+     "Todo"
+    ]
+   ],
+   "cEff": 5,
+   "swpSkill": 13,
+   "swp": 13,
+   "reviewNote": "Giữ 13. Chia ngày theo đầu ca + tuyến qua đêm + gộp nhiều tuyến là phần rủi ro nhất của validator (OQ-29).",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 52,
+   "k": 1.0,
+   "subIssues": [
+    {
+     "title": "Model hoạt động DRIVE/BREAK/REST/WORK/WAIT",
+     "share": 0.25,
+     "owner": "BE2",
+     "status": "Done",
+     "hours": 13
+    },
+    {
+     "title": "Chia ngày theo đầu ca, tuyến qua đêm",
+     "share": 0.25,
+     "owner": "BE2",
+     "status": "In Progress",
+     "hours": 13
+    },
+    {
+     "title": "Gộp actual + tuyến PUBLISHED cùng tài xế",
+     "share": 0.25,
+     "owner": "BE2",
+     "status": "Todo",
+     "hours": 13
+    },
+    {
+     "title": "Test timeline biên ngày/tháng",
+     "share": 0.25,
+     "owner": "QA1",
+     "status": "Todo",
+     "hours": 13
+    }
+   ],
+   "flags": [],
+   "sampleReason": "R2 ràng buộc pháp lý, SWP ≥ 8"
+  },
+  {
+   "key": "I-0804",
+   "epic": "E08",
+   "title": "Kiểm DUTY-BIND-D/M/Y (13–15h, 284h, 3.300h) và DUTY-REST (11h/9h)",
+   "spec": "FR-SCH-02; business-rules DUTY-BIND-*, DUTY-REST",
+   "lab1": "FT-08-02",
+   "S": 3,
+   "C": 3,
+   "legal": true,
+   "oq": "OQ-29",
+   "oqMode": "CFG",
+   "owner": "BE2",
+   "sprint": 2,
+   "status": "Todo",
+   "dod": "Ràng buộc 15h00 → PASS-WARN, 15h01 → BLOCK; nghỉ 8h59 → BLOCK",
+   "subs": [
+    [
+     "DUTY-BIND-D/M/Y",
+     0.5,
+     "BE2"
+    ],
+    [
+     "DUTY-REST",
+     0.5,
+     "BE2"
+    ]
+   ],
+   "cEff": 4,
+   "swpSkill": 8,
+   "swp": 8,
+   "reviewNote": "Giữ 8. Tích lũy tháng/năm dựa trên timeline của I-0803 nên không tăng thêm.",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 32,
+   "k": 1.0,
+   "subIssues": [
+    {
+     "title": "DUTY-BIND-D/M/Y",
+     "share": 0.5,
+     "owner": "BE2",
+     "status": null,
+     "hours": 16
+    },
+    {
+     "title": "DUTY-REST",
+     "share": 0.5,
+     "owner": "BE2",
+     "status": null,
+     "hours": 16
+    }
+   ],
+   "flags": [],
+   "sampleReason": "R2 ràng buộc pháp lý, SWP ≥ 8"
+  },
+  {
+   "key": "I-0805",
+   "epic": "E08",
+   "title": "Kiểm DUTY-DRV-2D (tham số BOTH/EITHER) và DUTY-DRV-2W (khối 2 tuần từ 起算日)",
+   "spec": "DSG-DUTY-01; PREMISE LAB-5 S-02, D-01",
+   "lab1": "FT-08-02",
+   "S": 2,
+   "C": 4,
+   "legal": true,
+   "oq": "OQ-28",
+   "oqMode": "CFG",
+   "owner": "BE1",
+   "sprint": 2,
+   "status": "Todo",
+   "dod": "Cùng dữ liệu cho kết quả khác nhau đúng theo mode BOTH/EITHER; khối 2 tuần > 88h → BLOCK",
+   "cEff": 5,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "Giữ 5. Đã cân nhắc tăng S do thêm mode BOTH/EITHER, nhưng chỉ là nhánh trong cùng hàm; ca thiếu dữ liệu D+1 được test ở I-0813.",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": "R3 chấm lệch |S−C| ≥ 2"
+  },
+  {
+   "key": "I-0806",
+   "epic": "E08",
+   "title": "DUTY-CONT ≤ 4h + tự chèn điểm nghỉ (30 phút, mỗi lần ≥ 10 phút)",
+   "spec": "FR-SCH-03; DSG-DUTY-02; US-482; T-15",
+   "lab1": "FT-08-03",
+   "S": 3,
+   "C": 3,
+   "legal": true,
+   "oq": "OQ-31, OQ-46",
+   "oqMode": "CFG",
+   "owner": "BE3",
+   "sprint": 2,
+   "status": "Todo",
+   "dod": "Lái 5h liền → có BREAK auto_inserted trước mốc 4h; không chèn được → DUTY-CONT BLOCK, tô đỏ 4h00–4h01",
+   "subs": [
+    [
+     "Kiểm DUTY-CONT (chỉ BREAK/REST ngắt)",
+     0.5,
+     "BE3"
+    ],
+    [
+     "Thuật toán chèn nghỉ trước 4h",
+     0.5,
+     "BE3"
+    ]
+   ],
+   "cEff": 4,
+   "swpSkill": 8,
+   "swp": 8,
+   "reviewNote": "Giữ 8.",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 32,
+   "k": 1.0,
+   "subIssues": [
+    {
+     "title": "Kiểm DUTY-CONT (chỉ BREAK/REST ngắt)",
+     "share": 0.5,
+     "owner": "BE3",
+     "status": null,
+     "hours": 16
+    },
+    {
+     "title": "Thuật toán chèn nghỉ trước 4h",
+     "share": 0.5,
+     "owner": "BE3",
+     "status": null,
+     "hours": 16
+    }
+   ],
+   "flags": [],
+   "sampleReason": "R2 ràng buộc pháp lý, SWP ≥ 8"
+  },
+  {
+   "key": "I-0807",
+   "epic": "E08",
+   "title": "DUTY-OT-Y làm thêm ≤ 960h/năm (công thức cắm được, chờ OQ-58)",
+   "spec": "business-rules DUTY-OT-Y; OQ-58",
+   "lab1": "FT-08-02",
+   "S": 2,
+   "C": 3,
+   "legal": true,
+   "oq": "OQ-58",
+   "oqMode": "STUB",
+   "owner": "BE1",
+   "sprint": 3,
+   "status": "Todo",
+   "dod": "Công thức là strategy theo version quy tắc; mặc định ràng buộc − nghỉ − 8h/ngày; đổi công thức không đổi code gọi",
+   "subs": [
+    [
+     "Strategy công thức OT + mặc định",
+     0.5,
+     "BE1"
+    ],
+    [
+     "Tích lũy năm từ period_origin_date + test",
+     0.5,
+     "QA1"
+    ]
+   ],
+   "cEff": 4,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 25,
+   "k": 1.25,
+   "subIssues": [
+    {
+     "title": "Strategy công thức OT + mặc định",
+     "share": 0.5,
+     "owner": "BE1",
+     "status": null,
+     "hours": 12
+    },
+    {
+     "title": "Tích lũy năm từ period_origin_date + test",
+     "share": 0.5,
+     "owner": "QA1",
+     "status": null,
+     "hours": 13
+    }
+   ],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0808",
+   "epic": "E08",
+   "title": "API duty-checks + lưu kết quả 8 mã + panel/timeline đỏ trên SCR-060",
+   "spec": "US-481; T-13; SCR060 §Validation; SM-802",
+   "lab1": "FT-08-02",
+   "S": 4,
+   "C": 3,
+   "owner": "FE1",
+   "sprint": 2,
+   "status": "Todo",
+   "dod": "Có BLOCK → timeline tô đỏ đúng khoảng vi phạm, cuộn tới vi phạm đầu",
+   "subs": [
+    [
+     "API POST duty-checks + duty_check_result",
+     0.4,
+     "BE2"
+    ],
+    [
+     "Panel kết quả 8 mã DUTY-*",
+     0.3,
+     "FE1"
+    ],
+    [
+     "Timeline tô đỏ khoảng vi phạm",
+     0.3,
+     "FE1"
+    ]
+   ],
+   "cEff": 3,
+   "swpSkill": 8,
+   "swp": 8,
+   "reviewNote": "Giữ 8. Hiển thị không chịu +1 pháp lý (legal=false) là đúng. Đã tách 3 sub-issue theo flag.",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 32,
+   "k": 1.0,
+   "subIssues": [
+    {
+     "title": "API POST duty-checks + duty_check_result",
+     "share": 0.4,
+     "owner": "BE2",
+     "status": null,
+     "hours": 13
+    },
+    {
+     "title": "Panel kết quả 8 mã DUTY-*",
+     "share": 0.3,
+     "owner": "FE1",
+     "status": null,
+     "hours": 10
+    },
+    {
+     "title": "Timeline tô đỏ khoảng vi phạm",
+     "share": 0.3,
+     "owner": "FE1",
+     "status": null,
+     "hours": 9
+    }
+   ],
+   "flags": [],
+   "sampleReason": "R1 flag: SUB-BIG"
+  },
+  {
+   "key": "I-0809",
+   "epic": "E08",
+   "title": "Cổng công bố: kiểm lại trong transaction, gắn version quy tắc, xác nhận WARN, không override, không hồi tố",
+   "spec": "DEC-801; SM-801 CHECKED→PUBLISHED; FR-SCH-04; T-13, T-16",
+   "lab1": "FT-08-04",
+   "S": 3,
+   "C": 4,
+   "legal": true,
+   "oq": "OQ-33, OQ-34",
+   "oqMode": "CFG",
+   "owner": "BE2",
+   "sprint": 3,
+   "status": "Todo",
+   "dod": "Không có nút override; kích hoạt version luật mới → tuyến đã công bố giữ version cũ; đổi version giữa kiểm và công bố → RULE_VERSION_CHANGED",
+   "subs": [
+    [
+     "Re-check trong transaction + bind duty_rule_set_version_id",
+     0.3,
+     "BE2"
+    ],
+    [
+     "Xác nhận WARN + nút 公開/再公開 (DEC-801)",
+     0.25,
+     "FE1"
+    ],
+    [
+     "Version mới hiệu lực trước plan_date → WARN",
+     0.2,
+     "BE2"
+    ],
+    [
+     "Test không hồi tố + RULE_VERSION_CHANGED",
+     0.25,
+     "QA1"
+    ]
+   ],
+   "cEff": 5,
+   "swpSkill": 13,
+   "swp": 8,
+   "reviewNote": "Giảm C 4 → 3 (SWP 13 → 8). Cộng +1 pháp lý bị tính trùng: ngưỡng luật nằm ở I-0804…I-0807, cổng công bố chỉ gọi lại validator trong transaction và gắn version. Phần không hồi tố vẫn có sub-issue test riêng.",
+   "reviewS": null,
+   "reviewC": 3,
+   "hours": 32,
+   "k": 1.0,
+   "subIssues": [
+    {
+     "title": "Re-check trong transaction + bind duty_rule_set_version_id",
+     "share": 0.3,
+     "owner": "BE2",
+     "status": null,
+     "hours": 10
+    },
+    {
+     "title": "Xác nhận WARN + nút 公開/再公開 (DEC-801)",
+     "share": 0.25,
+     "owner": "FE1",
+     "status": null,
+     "hours": 8
+    },
+    {
+     "title": "Version mới hiệu lực trước plan_date → WARN",
+     "share": 0.2,
+     "owner": "BE2",
+     "status": null,
+     "hours": 6
+    },
+    {
+     "title": "Test không hồi tố + RULE_VERSION_CHANGED",
+     "share": 0.25,
+     "owner": "QA1",
+     "status": null,
+     "hours": 8
+    }
+   ],
+   "flags": [],
+   "sampleReason": "R2 ràng buộc pháp lý, SWP ≥ 8"
+  },
+  {
+   "key": "I-0810",
+   "epic": "E08",
+   "title": "SCR-063 nhập giờ thực tế của tài xế (thiết kế + làm)",
+   "spec": "FT-08-06; P-09; PREMISE LAB-5 S-01",
+   "lab1": "FT-08-06",
+   "S": 3,
+   "C": 2,
+   "oq": "OQ-32",
+   "oqMode": "STUB",
+   "owner": "FE1",
+   "sprint": 3,
+   "status": "Todo",
+   "dod": "Spec màn được review; DSP/DRV nhập giờ D−1; validator dùng được driver_duty_actual",
+   "cEff": 2,
+   "swpSkill": 3,
+   "swp": 3,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 15,
+   "k": 1.25,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0811",
+   "epic": "E08",
+   "title": "SCR-062 ghi sự cố bất khả kháng, không đổi kết quả tuân thủ",
+   "spec": "FR-SCH-05; F08 API contract FM1–FM9; US-485; T-17; PREMISE LAB-5 S-03",
+   "lab1": "FT-08-05",
+   "S": 3,
+   "C": 3,
+   "owner": "FE1",
+   "status": "Todo",
+   "dod": "Ghi sự cố → duty_check_result không đổi; ≥1 file bằng chứng; không có API sửa/xóa",
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0812",
+   "epic": "E08",
+   "title": "Báo cáo tuân thủ giờ lái và báo cáo sự cố tách riêng",
+   "spec": "FR-SCH-05; US-487",
+   "lab1": "FT-08-05",
+   "S": 2,
+   "C": 3,
+   "owner": "BE1",
+   "status": "Todo",
+   "dod": "Hai báo cáo riêng; báo cáo tuân thủ ghi version quy tắc của từng tuyến",
+   "cEff": 3,
+   "swpSkill": 3,
+   "swp": 3,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 12,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0813",
+   "epic": "E08",
+   "title": "Bộ test ranh giới giờ lái: 8 mã × (= giới hạn, + 1 phút) + kịch bản R-06",
+   "spec": "ACC-SCH-01; T-13…T-17; PREMISE LAB-5 S-04",
+   "lab1": "FT-08-02",
+   "S": 4,
+   "C": 3,
+   "legal": true,
+   "owner": "QA1",
+   "sprint": 2,
+   "status": "Todo",
+   "dod": "16 ca biên + kịch bản R-06 chạy trên CI; bằng giới hạn = PASS (L4)",
+   "subs": [
+    [
+     "Fixture 8 mã × 2 biên",
+     0.3,
+     "QA1"
+    ],
+    [
+     "Kịch bản qua đêm, nhiều tuyến/ngày, thiếu actual",
+     0.25,
+     "QA1"
+    ],
+    [
+     "Kịch bản đổi version luật (không hồi tố)",
+     0.2,
+     "QA1"
+    ],
+    [
+     "Tích hợp CI + báo cáo",
+     0.25,
+     "QA1"
+    ]
+   ],
+   "cEff": 4,
+   "swpSkill": 13,
+   "swp": 13,
+   "reviewNote": "Giữ 13. Bộ test biên là bằng chứng nghiệm thu ACC-SCH-01; không giảm.",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 52,
+   "k": 1.0,
+   "subIssues": [
+    {
+     "title": "Fixture 8 mã × 2 biên",
+     "share": 0.3,
+     "owner": "QA1",
+     "status": null,
+     "hours": 16
+    },
+    {
+     "title": "Kịch bản qua đêm, nhiều tuyến/ngày, thiếu actual",
+     "share": 0.25,
+     "owner": "QA1",
+     "status": null,
+     "hours": 13
+    },
+    {
+     "title": "Kịch bản đổi version luật (không hồi tố)",
+     "share": 0.2,
+     "owner": "QA1",
+     "status": null,
+     "hours": 10
+    },
+    {
+     "title": "Tích hợp CI + báo cáo",
+     "share": 0.25,
+     "owner": "QA1",
+     "status": null,
+     "hours": 13
+    }
+   ],
+   "flags": [],
+   "sampleReason": "R2 ràng buộc pháp lý, SWP ≥ 8"
+  },
+  {
+   "key": "I-0901",
+   "epic": "E09",
+   "title": "PWA lịch trình tài xế: chỉ nhận phiên bản tuyến mới nhất kèm điểm nghỉ",
+   "spec": "FT-07-01; US-484; ADR-009",
+   "lab1": "FT-07-01",
+   "S": 3,
+   "C": 3,
+   "oq": "OQ-39",
+   "oqMode": "STUB",
+   "constraintTouch": true,
+   "owner": "FE1",
+   "status": "Todo",
+   "needsDesign": true,
+   "dod": "Tài xế thấy version mới nhất và BREAK tự chèn; bản SUPERSEDED không hiển thị",
+   "subs": [
+    [
+     "Màn lịch trình PWA",
+     0.5,
+     "FE1"
+    ],
+    [
+     "Đẩy version mới + test",
+     0.5,
+     "BE3"
+    ]
+   ],
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 25,
+   "k": 1.25,
+   "subIssues": [
+    {
+     "title": "Màn lịch trình PWA",
+     "share": 0.5,
+     "owner": "FE1",
+     "status": null,
+     "hours": 12
+    },
+    {
+     "title": "Đẩy version mới + test",
+     "share": 0.5,
+     "owner": "BE3",
+     "status": null,
+     "hours": 13
+    }
+   ],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-0902",
+   "epic": "E09",
+   "title": "Lấy POD theo điều kiện giao 車上渡し / 軒先渡し",
+   "spec": "FT-07-02; BR-POD-01; G-19",
+   "lab1": "FT-07-02",
+   "S": 3,
+   "C": 4,
+   "oq": "OQ-38",
+   "oqMode": "BLOCK",
+   "owner": "FE1",
+   "status": "Todo",
+   "needsDesign": true,
+   "dod": "Bằng chứng đúng theo enum ON_TRUCK/AT_DOOR",
+   "subs": [
+    [
+     "Form POD theo điều kiện giao",
+     0.35,
+     "FE1"
+    ],
+    [
+     "API POD + hash bằng chứng",
+     0.35,
+     "BE3"
+    ],
+    [
+     "Test POD 2 điều kiện giao",
+     0.3,
+     "QA1"
+    ]
+   ],
+   "cEff": 4,
+   "swpSkill": 8,
+   "swp": 8,
+   "reviewNote": "Giữ 8. OQ-38 BLOCK: không xếp sprint đến khi có trả lời. Đã tách 3 sub-issue.",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 40,
+   "k": 1.25,
+   "subIssues": [
+    {
+     "title": "Form POD theo điều kiện giao",
+     "share": 0.35,
+     "owner": "FE1",
+     "status": null,
+     "hours": 14
+    },
+    {
+     "title": "API POD + hash bằng chứng",
+     "share": 0.35,
+     "owner": "BE3",
+     "status": null,
+     "hours": 14
+    },
+    {
+     "title": "Test POD 2 điều kiện giao",
+     "share": 0.3,
+     "owner": "QA1",
+     "status": null,
+     "hours": 12
+    }
+   ],
+   "flags": [],
+   "sampleReason": "R1 flag: SUB-BIG"
+  },
+  {
+   "key": "I-0903",
+   "epic": "E09",
+   "title": "Hàng đợi offline IndexedDB mã hóa AES-GCM ≤ 8h, đồng bộ an toàn",
+   "spec": "FT-07-03; ADR-009; NFR-AVL-02; T-24",
+   "lab1": "FT-07-03",
+   "S": 4,
+   "C": 4,
+   "oq": "OQ-39",
+   "oqMode": "STUB",
+   "owner": "TL",
+   "status": "Todo",
+   "needsDesign": true,
+   "dod": "Mất mạng → POD vào hàng đợi mã hóa; quá 8h → khóa; giao dịch kho không chạy offline",
+   "subs": [
+    [
+     "Mã hóa + lưu IndexedDB",
+     0.2,
+     "TL"
+    ],
+    [
+     "Đồng bộ idempotent khi có mạng",
+     0.2,
+     "BE3"
+    ],
+    [
+     "Xử lý xung đột",
+     0.2,
+     "TL"
+    ],
+    [
+     "Hết hạn 8h + khóa giao dịch kho offline",
+     0.2,
+     "FE1"
+    ],
+    [
+     "Test mất mạng",
+     0.2,
+     "QA1"
+    ]
+   ],
+   "cEff": 4,
+   "swpSkill": 13,
+   "swp": 13,
+   "reviewNote": "Giữ 13 (65h). Rủi ro kỹ thuật cao nhất của F07; cần spike thiết kế trước. Đã tách 5 sub-issue.",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 65,
+   "k": 1.25,
+   "subIssues": [
+    {
+     "title": "Mã hóa + lưu IndexedDB",
+     "share": 0.2,
+     "owner": "TL",
+     "status": null,
+     "hours": 13
+    },
+    {
+     "title": "Đồng bộ idempotent khi có mạng",
+     "share": 0.2,
+     "owner": "BE3",
+     "status": null,
+     "hours": 13
+    },
+    {
+     "title": "Xử lý xung đột",
+     "share": 0.2,
+     "owner": "TL",
+     "status": null,
+     "hours": 13
+    },
+    {
+     "title": "Hết hạn 8h + khóa giao dịch kho offline",
+     "share": 0.2,
+     "owner": "FE1",
+     "status": null,
+     "hours": 13
+    },
+    {
+     "title": "Test mất mạng",
+     "share": 0.2,
+     "owner": "QA1",
+     "status": null,
+     "hours": 13
+    }
+   ],
+   "flags": [],
+   "sampleReason": "R1 flag: SUB-BIG"
+  },
+  {
+   "key": "I-0904",
+   "epic": "E09",
+   "title": "Quản lý bằng chứng POD (hash, version) và khiếu nại/trả hàng",
+   "spec": "FT-07-04, FT-07-05",
+   "lab1": "FT-07-04,FT-07-05",
+   "S": 4,
+   "C": 3,
+   "owner": "BE3",
+   "status": "Todo",
+   "needsDesign": true,
+   "dod": "Bằng chứng không sửa được, chỉ thêm version; khiếu nại liên kết lô và chuyến",
+   "subs": [
+    [
+     "Bằng chứng POD có hash + version",
+     0.5,
+     "BE3"
+    ],
+    [
+     "Khiếu nại / trả hàng",
+     0.5,
+     "FE1"
+    ]
+   ],
+   "cEff": 3,
+   "swpSkill": 8,
+   "swp": 8,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 32,
+   "k": 1.0,
+   "subIssues": [
+    {
+     "title": "Bằng chứng POD có hash + version",
+     "share": 0.5,
+     "owner": "BE3",
+     "status": null,
+     "hours": 16
+    },
+    {
+     "title": "Khiếu nại / trả hàng",
+     "share": 0.5,
+     "owner": "FE1",
+     "status": null,
+     "hours": 16
+    }
+   ],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-1001",
+   "epic": "E10",
+   "title": "Import CSV logger: SHA-256, idempotent, lỗi theo dòng",
+   "spec": "FT-09-01; FR-TEMP-01; ADR-007; T-19",
+   "lab1": "FT-09-01",
+   "S": 3,
+   "C": 3,
+   "oq": "OQ-27",
+   "oqMode": "STUB",
+   "owner": "BE1",
+   "status": "Todo",
+   "dod": "Upload 2 lần → 1 import; dòng lỗi được liệt kê, dòng tốt vẫn nạp",
+   "subs": [
+    [
+     "Parser CSV theo mẫu R-05 (adapter)",
+     0.5,
+     "BE1"
+    ],
+    [
+     "Hash + idempotent + lỗi theo dòng",
+     0.5,
+     "BE1"
+    ]
+   ],
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 25,
+   "k": 1.25,
+   "subIssues": [
+    {
+     "title": "Parser CSV theo mẫu R-05 (adapter)",
+     "share": 0.5,
+     "owner": "BE1",
+     "status": null,
+     "hours": 12
+    },
+    {
+     "title": "Hash + idempotent + lỗi theo dòng",
+     "share": 0.5,
+     "owner": "BE1",
+     "status": null,
+     "hours": 13
+    }
+   ],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-1002",
+   "epic": "E10",
+   "title": "Đánh giá nhiệt và sinh alarm (first/last/peak/duration, version ngưỡng, lô ảnh hưởng)",
+   "spec": "FT-09-02; FR-TEMP-02; DSG-TEMP-02; T-20",
+   "lab1": "FT-09-02",
+   "S": 3,
+   "C": 4,
+   "oq": "OQ-21, OQ-22, OQ-50",
+   "oqMode": "CFG",
+   "owner": "BE1",
+   "status": "Todo",
+   "dod": "2 lần đọc 6.0℃ vùng Mát → 1 alarm 30 phút; dùng vị trí logger tại giờ đo",
+   "subs": [
+    [
+     "Evaluator + gộp lần đọc thành alarm",
+     0.5,
+     "BE1"
+    ],
+    [
+     "Xác định lô ảnh hưởng theo vị trí tại giờ đo",
+     0.5,
+     "BE1"
+    ]
+   ],
+   "cEff": 4,
+   "swpSkill": 8,
+   "swp": 8,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 32,
+   "k": 1.0,
+   "subIssues": [
+    {
+     "title": "Evaluator + gộp lần đọc thành alarm",
+     "share": 0.5,
+     "owner": "BE1",
+     "status": null,
+     "hours": 16
+    },
+    {
+     "title": "Xác định lô ảnh hưởng theo vị trí tại giờ đo",
+     "share": 0.5,
+     "owner": "BE1",
+     "status": null,
+     "hours": 16
+    }
+   ],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-1003",
+   "epic": "E10",
+   "title": "Alarm → hồ sơ sai lệch + cách ly lô liên quan trong cùng transaction",
+   "spec": "BR-HACCP-01; DSG-TEMP-04; T-21b; G-31",
+   "lab1": "FT-09-02",
+   "S": 3,
+   "C": 4,
+   "oq": "OQ-10, OQ-22, OQ-56",
+   "oqMode": "CFG",
+   "owner": "BE2",
+   "status": "Todo",
+   "dod": "Alarm mới → deviation + mọi lô AVAILABLE thành QUARANTINE cùng transaction",
+   "subs": [
+    [
+     "Transaction deviation + cách ly",
+     0.5,
+     "BE2"
+    ],
+    [
+     "Test nối với hủy phân bổ (I-0404)",
+     0.5,
+     "QA1"
+    ]
+   ],
+   "cEff": 4,
+   "swpSkill": 8,
+   "swp": 8,
+   "reviewNote": "Giữ 8. Đã chia sub 50/50.",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 32,
+   "k": 1.0,
+   "subIssues": [
+    {
+     "title": "Transaction deviation + cách ly",
+     "share": 0.5,
+     "owner": "BE2",
+     "status": null,
+     "hours": 16
+    },
+    {
+     "title": "Test nối với hủy phân bổ (I-0404)",
+     "share": 0.5,
+     "owner": "QA1",
+     "status": null,
+     "hours": 16
+    }
+   ],
+   "flags": [],
+   "sampleReason": "R1 flag: SUB-BIG"
+  },
+  {
+   "key": "I-1004",
+   "epic": "E10",
+   "title": "SCR-082 hàng đợi alarm + job SLA 15 phút",
+   "spec": "SCR082_TempAlarmQueue; FR-TEMP-03; T-21",
+   "lab1": "FT-09-03",
+   "S": 3,
+   "C": 3,
+   "oq": "OQ-20, OQ-49",
+   "oqMode": "CFG",
+   "owner": "FE1",
+   "status": "Todo",
+   "dod": "Alarm 23:30 → hạn SLA 05:15; review 05:20 → sla_breached; sắp theo severity",
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-1005",
+   "epic": "E10",
+   "title": "Quản lý hồ sơ sai lệch: điều tra, khắc phục, phán định, đóng",
+   "spec": "FT-09-04; US-495",
+   "lab1": "FT-09-04",
+   "S": 3,
+   "C": 3,
+   "oq": "OQ-24",
+   "oqMode": "CFG",
+   "owner": "BE2",
+   "status": "Todo",
+   "dod": "MAJOR/CRITICAL đóng cần 2 người",
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-1006",
+   "epic": "E10",
+   "title": "[Thiết kế] HACCP: hàng đợi đủ hồ sơ, nhật ký vệ sinh/khách, review ngày/tháng",
+   "spec": "FT-09-05…07; BR-HACCP-01",
+   "lab1": "FT-09-05,FT-09-06,FT-09-07",
+   "S": 3,
+   "C": 2,
+   "type": "design",
+   "owner": "BrSE",
+   "status": "Todo",
+   "dod": "ERD + spec 3 màn được review",
+   "cEff": 2,
+   "swpSkill": 3,
+   "swp": 3,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 12,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-1101",
+   "epic": "E11",
+   "title": "Tìm truy xuất theo lô/SKU/NCC/xuất xứ gạo/mã bò",
+   "spec": "FT-10-01; FR-TRC-01",
+   "lab1": "FT-10-01",
+   "S": 3,
+   "C": 3,
+   "owner": "BE3",
+   "status": "Todo",
+   "needsDesign": true,
+   "dod": "Từ mã bò 10 số ra được mọi chuyến giao trong ≤ 3 giây",
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-1102",
+   "epic": "E11",
+   "title": "Hồ sơ thu hồi, đối chiếu số lượng, thông báo thu hồi có duyệt",
+   "spec": "FT-10-02, FT-10-03",
+   "lab1": "FT-10-02,FT-10-03",
+   "S": 4,
+   "C": 3,
+   "owner": "BE3",
+   "status": "Todo",
+   "needsDesign": true,
+   "dod": "Số đã giao − đã thu hồi − còn tồn = 0 hoặc có lý do",
+   "subs": [
+    [
+     "Hồ sơ thu hồi + đối chiếu",
+     0.5,
+     "BE3"
+    ],
+    [
+     "Thông báo thu hồi có version + duyệt",
+     0.5,
+     "FE1"
+    ]
+   ],
+   "cEff": 3,
+   "swpSkill": 8,
+   "swp": 8,
+   "reviewNote": "Giữ 8 (đối chứng epic F10). Ước lượng thô vì F10 chỉ có ở mức dữ liệu.",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 32,
+   "k": 1.0,
+   "subIssues": [
+    {
+     "title": "Hồ sơ thu hồi + đối chiếu",
+     "share": 0.5,
+     "owner": "BE3",
+     "status": null,
+     "hours": 16
+    },
+    {
+     "title": "Thông báo thu hồi có version + duyệt",
+     "share": 0.5,
+     "owner": "FE1",
+     "status": null,
+     "hours": 16
+    }
+   ],
+   "flags": [],
+   "sampleReason": "R4 SWP lớn nhất của epic (đối chứng)"
+  },
+  {
+   "key": "I-1201",
+   "epic": "E12",
+   "title": "Khung báo cáo (read replica, lọc, CSV) + 6 báo cáo kho",
+   "spec": "FT-11-01 (phần kho)",
+   "lab1": "FT-11-01",
+   "S": 4,
+   "C": 3,
+   "owner": "BE1",
+   "status": "Todo",
+   "needsDesign": true,
+   "dod": "Báo cáo chạy trên read replica; CSV UTF-8 BOM",
+   "subs": [
+    [
+     "Khung báo cáo + export CSV",
+     0.5,
+     "BE1"
+    ],
+    [
+     "6 báo cáo kho",
+     0.5,
+     "FE1"
+    ]
+   ],
+   "cEff": 3,
+   "swpSkill": 8,
+   "swp": 8,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 32,
+   "k": 1.0,
+   "subIssues": [
+    {
+     "title": "Khung báo cáo + export CSV",
+     "share": 0.5,
+     "owner": "BE1",
+     "status": null,
+     "hours": 16
+    },
+    {
+     "title": "6 báo cáo kho",
+     "share": 0.5,
+     "owner": "FE1",
+     "status": null,
+     "hours": 16
+    }
+   ],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-1202",
+   "epic": "E12",
+   "title": "6 báo cáo xuất/giao/nhiệt",
+   "spec": "FT-11-01 (phần xuất, nhiệt)",
+   "lab1": "FT-11-01",
+   "S": 4,
+   "C": 2,
+   "owner": "FE1",
+   "status": "Todo",
+   "needsDesign": true,
+   "dod": "Đủ 12 báo cáo cùng I-1201",
+   "cEff": 2,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "Giữ 5. 6 báo cáo dùng khung của I-1201, độ khó thấp.",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": "R3 chấm lệch |S−C| ≥ 2"
+  },
+  {
+   "key": "I-1203",
+   "epic": "E12",
+   "title": "Dashboard KPI có version công thức",
+   "spec": "FT-11-02",
+   "lab1": "FT-11-02",
+   "S": 3,
+   "C": 3,
+   "owner": "FE1",
+   "status": "Todo",
+   "needsDesign": true,
+   "dod": "KPI ghi version công thức đã dùng",
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-1204",
+   "epic": "E12",
+   "title": "Xuất bằng chứng kiểm toán và gói HACCP tháng (manifest checksum)",
+   "spec": "FT-11-03, FT-11-04; FR-RPT-02",
+   "lab1": "FT-11-03,FT-11-04",
+   "S": 3,
+   "C": 3,
+   "owner": "BE2",
+   "status": "Todo",
+   "dod": "Manifest SHA-256 kiểm lại được",
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-1301",
+   "epic": "E13",
+   "title": "ERP → đơn qua SFTP: checksum, khóa, từ chối cả file",
+   "spec": "FT-12-01; IF-ERP-01; P-24",
+   "lab1": "FT-12-01",
+   "S": 3,
+   "C": 3,
+   "oq": "OQ-41",
+   "oqMode": "CFG",
+   "owner": "BE3",
+   "status": "Todo",
+   "dod": "Sai checksum/trùng khóa/sai format → từ chối cả file",
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "Giữ 5 (đối chứng epic F12).",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": "R4 SWP lớn nhất của epic (đối chứng)"
+  },
+  {
+   "key": "I-1302",
+   "epic": "E13",
+   "title": "Xuất kết quả xuất/tồn sang ERP cuối ngày + archive PDF/CSV",
+   "spec": "FT-12-01, FT-12-03; IF-ARCH-01",
+   "lab1": "FT-12-03",
+   "S": 3,
+   "C": 2,
+   "owner": "BE3",
+   "status": "Todo",
+   "dod": "File có số thứ tự + manifest",
+   "cEff": 2,
+   "swpSkill": 3,
+   "swp": 3,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 12,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-1303",
+   "epic": "E13",
+   "title": "Giám sát interface và xử lý lại",
+   "spec": "FT-12-04; NFR-OPS-01",
+   "lab1": "FT-12-04",
+   "S": 2,
+   "C": 3,
+   "owner": "BE3",
+   "status": "Todo",
+   "dod": "File lỗi xử lý lại được, không nạp trùng",
+   "cEff": 3,
+   "swpSkill": 3,
+   "swp": 3,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 12,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-1401",
+   "epic": "E14",
+   "title": "Công cụ nạp và profiling dữ liệu migration",
+   "spec": "FT-13-01; DR-MIG-01",
+   "lab1": "FT-13-01",
+   "S": 4,
+   "C": 3,
+   "owner": "BE1",
+   "status": "Todo",
+   "needsDesign": true,
+   "dod": "Mỗi dòng có kết quả ACCEPT/REJECT/DUPLICATE/BUSINESS-REVIEW",
+   "subs": [
+    [
+     "Loader + mapping",
+     0.5,
+     "BE1"
+    ],
+    [
+     "Profiling + báo cáo chất lượng",
+     0.5,
+     "BE1"
+    ]
+   ],
+   "cEff": 3,
+   "swpSkill": 8,
+   "swp": 8,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 32,
+   "k": 1.0,
+   "subIssues": [
+    {
+     "title": "Loader + mapping",
+     "share": 0.5,
+     "owner": "BE1",
+     "status": null,
+     "hours": 16
+    },
+    {
+     "title": "Profiling + báo cáo chất lượng",
+     "share": 0.5,
+     "owner": "BE1",
+     "status": null,
+     "hours": 16
+    }
+   ],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-1402",
+   "epic": "E14",
+   "title": "Lineage và lý do từ chối",
+   "spec": "FT-13-02",
+   "lab1": "FT-13-02",
+   "S": 3,
+   "C": 3,
+   "owner": "BE1",
+   "status": "Todo",
+   "dod": "Mọi bản ghi đích truy về dòng nguồn",
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 20,
+   "k": 1.0,
+   "subIssues": [],
+   "flags": [],
+   "sampleReason": ""
+  },
+  {
+   "key": "I-1403",
+   "epic": "E14",
+   "title": "Đối chiếu + business review, gồm lịch sử giao làm mốc đảo ngày",
+   "spec": "FT-13-03; DSG-DATE-01; G-24",
+   "lab1": "FT-13-03",
+   "S": 3,
+   "C": 3,
+   "oq": "OQ-43",
+   "oqMode": "BLOCK",
+   "owner": "BE1",
+   "status": "Todo",
+   "dod": "Lịch sử giao migrate có source = MIGRATION và vẫn tính mốc",
+   "subs": [
+    [
+     "Đối chiếu số lượng + business review",
+     0.5,
+     "BE1"
+    ],
+    [
+     "Lịch sử giao MIGRATION làm mốc đảo ngày (chờ OQ-43)",
+     0.5,
+     "BE1"
+    ]
+   ],
+   "cEff": 3,
+   "swpSkill": 5,
+   "swp": 5,
+   "reviewNote": "Giữ 5. Đã thêm 2 sub-issue theo flag NEED-SUB; phần lịch sử giao chờ OQ-43.",
+   "reviewS": null,
+   "reviewC": null,
+   "hours": 25,
+   "k": 1.25,
+   "subIssues": [
+    {
+     "title": "Đối chiếu số lượng + business review",
+     "share": 0.5,
+     "owner": "BE1",
+     "status": null,
+     "hours": 12
+    },
+    {
+     "title": "Lịch sử giao MIGRATION làm mốc đảo ngày (chờ OQ-43)",
+     "share": 0.5,
+     "owner": "BE1",
+     "status": null,
+     "hours": 13
+    }
+   ],
+   "flags": [],
+   "sampleReason": "R1 flag: NEED-SUB"
+  }
+ ]
+}

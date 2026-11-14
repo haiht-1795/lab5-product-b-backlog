@@ -1,0 +1,114 @@
+{
+ "reviewer": "haiht-1795 (vai trò TL/estimator); bản nháp do AI đề xuất, người review đọc spec LAB-4 rồi chốt",
+ "date": "2026-11-14",
+ "decisions": {
+  "I-0109": {
+   "note": "Giữ 5. Gộp 3 tính năng nhỏ chưa có spec (FT-01-05/08/09) làm chỗ giữ effort; sẽ tách 3 issue khi spec được duyệt. Không xếp sprint."
+  },
+  "I-0201": {
+   "note": "Giữ 5. 4 master CRUD đơn giản (C2) nhưng phải sửa seed theo R-01/R-02 (G-01/02/07/23/32): S4 đúng."
+  },
+  "I-0204": {
+   "note": "Giữ 5. Scope nhỏ nhưng exclusion constraint tstzrange + quy tắc không hồi tố khó test: C4 đúng."
+  },
+  "I-0305": {
+   "note": "Giữ 8. STUB OQ-15 (trùng số lô) nên k=1.25 là hợp lý. Đã tách 3 sub-issue theo flag SUB-BIG."
+  },
+  "I-0401": {
+   "note": "Giữ 13. Sổ tồn là nền cho F05/F06; đã tách 4 sub-issue ≤ 13h theo flag SUB-BIG."
+  },
+  "I-0501": {
+   "note": "Giữ 13. Port từ prototype nhưng phải sửa 4 lỗi G-03/04/06/25; đã tách 4 sub-issue theo flag."
+  },
+  "I-0503": {
+   "note": "Giữ 8. Đã chia lại sub-issue 50/50 (test đồng thời tốn ngang phần code)."
+  },
+  "I-0601": {
+   "note": "Giữ 13. Màn quét 2 chế độ + kiểm lại G2/G3; đã chỉnh tỉ lệ sub-issue để mỗi sub ≤ 16h."
+  },
+  "I-0603": {
+   "note": "Giữ 8. Đã chia sub 50/50."
+  },
+  "I-0604": {
+   "S": 4,
+   "note": "Tăng S 3 → 4 (SWP 8 → 13). Skill chấm như việc nội bộ F06, nhưng dỡ đơn kéo theo tạo version tuyến mới và chạy lại kiểm giờ lái 2024 (xuyên outbound + routing-duty). Đã tách 5 sub-issue."
+  },
+  "I-0701": {
+   "note": "Giữ 13. Đã chỉnh tỉ lệ sub-issue."
+  },
+  "I-0801": {
+   "note": "Giữ 8. +1 pháp lý đúng: 8 tham số DUTY-* và cờ verified_by_legal là chỗ duy nhất giữ giá trị luật."
+  },
+  "I-0803": {
+   "note": "Giữ 13. Chia ngày theo đầu ca + tuyến qua đêm + gộp nhiều tuyến là phần rủi ro nhất của validator (OQ-29)."
+  },
+  "I-0804": {
+   "note": "Giữ 8. Tích lũy tháng/năm dựa trên timeline của I-0803 nên không tăng thêm."
+  },
+  "I-0805": {
+   "note": "Giữ 5. Đã cân nhắc tăng S do thêm mode BOTH/EITHER, nhưng chỉ là nhánh trong cùng hàm; ca thiếu dữ liệu D+1 được test ở I-0813."
+  },
+  "I-0806": {
+   "note": "Giữ 8."
+  },
+  "I-0808": {
+   "note": "Giữ 8. Hiển thị không chịu +1 pháp lý (legal=false) là đúng. Đã tách 3 sub-issue theo flag."
+  },
+  "I-0809": {
+   "C": 3,
+   "note": "Giảm C 4 → 3 (SWP 13 → 8). Cộng +1 pháp lý bị tính trùng: ngưỡng luật nằm ở I-0804…I-0807, cổng công bố chỉ gọi lại validator trong transaction và gắn version. Phần không hồi tố vẫn có sub-issue test riêng."
+  },
+  "I-0813": {
+   "note": "Giữ 13. Bộ test biên là bằng chứng nghiệm thu ACC-SCH-01; không giảm."
+  },
+  "I-0902": {
+   "note": "Giữ 8. OQ-38 BLOCK: không xếp sprint đến khi có trả lời. Đã tách 3 sub-issue."
+  },
+  "I-0903": {
+   "note": "Giữ 13 (65h). Rủi ro kỹ thuật cao nhất của F07; cần spike thiết kế trước. Đã tách 5 sub-issue."
+  },
+  "I-1003": {
+   "note": "Giữ 8. Đã chia sub 50/50."
+  },
+  "I-1102": {
+   "note": "Giữ 8 (đối chứng epic F10). Ước lượng thô vì F10 chỉ có ở mức dữ liệu."
+  },
+  "I-1202": {
+   "note": "Giữ 5. 6 báo cáo dùng khung của I-1201, độ khó thấp."
+  },
+  "I-1301": {
+   "note": "Giữ 5 (đối chứng epic F12)."
+  },
+  "I-1403": {
+   "note": "Giữ 5. Đã thêm 2 sub-issue theo flag NEED-SUB; phần lịch sử giao chờ OQ-43."
+  }
+ },
+ "samplesFirstRun": {
+  "I-0109": "R3 chấm lệch |S−C| ≥ 2",
+  "I-0201": "R3 chấm lệch |S−C| ≥ 2",
+  "I-0204": "R3 chấm lệch |S−C| ≥ 2",
+  "I-0305": "R1 flag: SUB-BIG",
+  "I-0401": "R1 flag: SUB-BIG",
+  "I-0501": "R1 flag: SUB-BIG",
+  "I-0503": "R1 flag: SUB-BIG",
+  "I-0601": "R1 flag: SUB-BIG",
+  "I-0603": "R1 flag: SUB-BIG",
+  "I-0604": "R1 flag: SUB-BIG",
+  "I-0701": "R1 flag: SUB-BIG",
+  "I-0801": "R2 ràng buộc pháp lý, SWP ≥ 8",
+  "I-0803": "R2 ràng buộc pháp lý, SWP ≥ 8",
+  "I-0804": "R2 ràng buộc pháp lý, SWP ≥ 8",
+  "I-0805": "R3 chấm lệch |S−C| ≥ 2",
+  "I-0806": "R2 ràng buộc pháp lý, SWP ≥ 8",
+  "I-0808": "R1 flag: SUB-BIG",
+  "I-0809": "R2 ràng buộc pháp lý, SWP ≥ 8",
+  "I-0813": "R2 ràng buộc pháp lý, SWP ≥ 8",
+  "I-0902": "R1 flag: SUB-BIG",
+  "I-0903": "R1 flag: SUB-BIG",
+  "I-1003": "R1 flag: SUB-BIG",
+  "I-1102": "R4 SWP lớn nhất của epic (đối chứng)",
+  "I-1202": "R3 chấm lệch |S−C| ≥ 2",
+  "I-1301": "R4 SWP lớn nhất của epic (đối chứng)",
+  "I-1403": "R1 flag: NEED-SUB"
+ }
+}
