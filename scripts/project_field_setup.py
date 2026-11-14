@@ -13,6 +13,12 @@ FIELDS_Q = """query($p:ID!){node(id:$p){... on ProjectV2{fields(first:50){nodes{
  ... on ProjectV2IterationField{configuration{iterations{id title} completedIterations{id title}}}}}}}}"""
 
 
+def epic_label(ep):
+    """Option name of the 'Epic' single-select field (groupable, unlike the built-in Parent issue)."""
+    title = ep["title"] if len(ep["title"]) <= 45 else ep["title"][:44] + "…"
+    return f"{ep['key']} {title}"
+
+
 def _fields(pid):
     return {f["name"]: f for f in graphql(FIELDS_Q, {"p": pid})["node"]["fields"]["nodes"] if f}
 
@@ -35,7 +41,8 @@ def ensure_fields(pid, data):
                 f'singleSelectOptions:{_opts(STATUS, STATUS_COLORS)}}}){{projectV2Field{{... on ProjectV2FieldCommon{{id}}}}}}}}')
     wanted = {"SWP": ("NUMBER", None), "Giờ ước lượng": ("NUMBER", None),
               "Phụ trách (giả định)": ("SINGLE_SELECT", data["meta"]["owners"]),
-              "Cấp": ("SINGLE_SELECT", LEVELS), "Ràng buộc đặc thù": ("SINGLE_SELECT", CONSTRAINTS)}
+              "Cấp": ("SINGLE_SELECT", LEVELS), "Ràng buộc đặc thù": ("SINGLE_SELECT", CONSTRAINTS),
+              "Epic": ("SINGLE_SELECT", [epic_label(e) for e in data["epics"]])}
     for name, (dtype, options) in wanted.items():
         if name not in f:
             _create(pid, name, dtype, options)

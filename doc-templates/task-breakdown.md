@@ -25,7 +25,7 @@ Nguồn duy nhất của backlog là [backlog/backlog.json](backlog/backlog.json
 
 **Cách dùng epic → issue → sub-issue trên Project**
 - Dùng tính năng sub-issue của GitHub: epic là issue cha của issue, issue là cha của sub-issue. Cột *Parent issue* và *Sub-issues progress* tự cập nhật.
-- Trường riêng: `Cấp` (Epic/Issue/Sub-issue), `SWP` (chỉ ghi ở Issue; ở Epic là tổng), `Giờ ước lượng`, `Phụ trách (giả định)`, `Ràng buộc đặc thù`, `Iteration`, `Status` (Todo / In Progress / In Review / Blocked / Done).
+- Trường riêng: `Epic` (single-select E01…E14, dùng để Group by vì trường hệ thống Parent issue không nhóm được), `Cấp` (Epic/Issue/Sub-issue), `SWP` (chỉ ghi ở Issue; ở Epic là tổng), `Giờ ước lượng`, `Phụ trách (giả định)`, `Ràng buộc đặc thù`, `Iteration`, `Status` (Todo / In Progress / In Review / Blocked / Done).
 - Khi cộng SWP hoặc giờ trên Project, lọc `Cấp = Issue` để không cộng trùng epic và sub-issue.
 - Nhãn: `type:*`, `constraint:duty-2024`, `constraint:touch-duty-2024`, `oq:*`, `needs-design`.
 

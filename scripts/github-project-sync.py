@@ -9,7 +9,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from gh_cli import OWNER, PROJECT_NUMBER, REPO, graphql, load_json, rest, save_json  # noqa: E402
-from project_field_setup import ensure_fields  # noqa: E402
+from project_field_setup import ensure_fields, epic_label  # noqa: E402
 
 SCORED, MAP = "backlog/backlog-scored.json", "backlog/github-map.json"
 BATCH = 6
@@ -39,15 +39,16 @@ def rows(data):
     """Yield (key, values) where values maps field name -> python value."""
     constraint = lambda it: ("Giờ lái 2024" if it["epic"] == "E08"
                              else "Liên quan giờ lái 2024" if it.get("constraintTouch") else "Không")
+    labels = {ep["key"]: epic_label(ep) for ep in data["epics"]}
     for ep in data["epics"]:
         its = [i for i in data["issues"] if i["epic"] == ep["key"]]
         st = [i["status"] for i in its]
         status = "Done" if all(s == "Done" for s in st) else ("Todo" if all(s == "Todo" for s in st) else "In Progress")
         yield ep["key"], {"Status": status, "Cấp": "Epic", "SWP": sum(i["swp"] for i in its),
-                          "Giờ ước lượng": sum(i["hours"] for i in its),
+                          "Giờ ước lượng": sum(i["hours"] for i in its), "Epic": labels[ep["key"]],
                           "Ràng buộc đặc thù": "Giờ lái 2024" if ep.get("constraint") else "Không"}
     for it in data["issues"]:
-        base = {"Iteration": it.get("sprint"), "Ràng buộc đặc thù": constraint(it)}
+        base = {"Iteration": it.get("sprint"), "Ràng buộc đặc thù": constraint(it), "Epic": labels[it["epic"]]}
         yield it["key"], {**base, "Status": it["status"], "Cấp": "Issue", "SWP": it["swp"],
                           "Giờ ước lượng": it["hours"], "Phụ trách (giả định)": it["owner"]}
         for n, sub in enumerate(it["subIssues"], 1):
@@ -64,11 +65,11 @@ def value_literal(field, val):
     return f'{{singleSelectOptionId:"{field["options"][val]}"}}'
 
 
-def write_values(pid, fields, items, data):
+def write_values(pid, fields, items, data, only=None):
     muts = []
     for key, vals in rows(data):
         for fname, val in vals.items():
-            if val in (None, ""):
+            if val in (None, "") or (only and fname not in only):
                 continue
             f = fields[fname]
             muts.append(f'updateProjectV2ItemFieldValue(input:{{projectId:"{pid}",itemId:"{items[key]}",'
@@ -89,7 +90,11 @@ def main():
     pid = project_id()
     fields = ensure_fields(pid, data)
     items = add_items(pid, gmap)
-    print("field values written:", write_values(pid, fields, items, data))
+    # `--only Epic Status` rewrites just those fields (fast partial sync).
+    only = sys.argv[sys.argv.index("--only") + 1:] if "--only" in sys.argv else None
+    print("field values written:", write_values(pid, fields, items, data, only))
+    if only:
+        return
     close_done(data, gmap)
     readme = ("Backlog LAB-5 Product B (Yuki Cold Logistics) break từ thiết kế LAB-4. Cấp Epic → Issue → Sub-issue. "
               "SWP chỉ ghi ở cấp Issue (đã review); Epic = tổng; Sub-issue chỉ có giờ. Khi cộng SWP/giờ hãy lọc Cấp = Issue. "
