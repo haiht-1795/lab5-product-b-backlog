@@ -40,6 +40,7 @@ def ensure_fields(pid, data):
         graphql(f'mutation{{updateProjectV2Field(input:{{fieldId:"{status["id"]}",'
                 f'singleSelectOptions:{_opts(STATUS, STATUS_COLORS)}}}){{projectV2Field{{... on ProjectV2FieldCommon{{id}}}}}}}}')
     wanted = {"SWP": ("NUMBER", None), "Giờ ước lượng": ("NUMBER", None),
+              "Giờ thực tế": ("NUMBER", None), "Giờ còn lại (ước lại)": ("NUMBER", None),
               "Phụ trách (giả định)": ("SINGLE_SELECT", data["meta"]["owners"]),
               "Cấp": ("SINGLE_SELECT", LEVELS), "Ràng buộc đặc thù": ("SINGLE_SELECT", CONSTRAINTS),
               "Epic": ("SINGLE_SELECT", [epic_label(e) for e in data["epics"]])}

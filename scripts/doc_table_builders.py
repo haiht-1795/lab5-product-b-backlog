@@ -80,15 +80,33 @@ def samples(data):
     return "\n".join(rows)
 
 
+def timesheet(it):
+    """(actual, remaining) of an issue: own values or the sum over its sub-issues."""
+    subs = it["subIssues"]
+    if subs:
+        done = it["status"] == "Done"
+        act = sum(s.get("actual", 0) for s in subs)
+        rem = sum(s.get("remaining", 0 if (done or s.get("status") == "Done") else s["hours"]) for s in subs)
+        return act, rem
+    return it.get("actual", 0), it.get("remaining", 0 if it["status"] == "Done" else it["hours"])
+
+
 def status_sprint(data, sprint=1):
     order = ["Done", "In Review", "In Progress", "Blocked", "Todo"]
-    rows = ["| Trạng thái | Số issue | Tổng SWP | Giờ | Ghi chú |", "|---|---:|---:|---:|---|"]
+    rows = ["| Trạng thái | Số issue | Tổng SWP | Giờ ước | Giờ thực tế | Còn lại (ước lại) | Ghi chú |",
+            "|---|---:|---:|---:|---:|---:|---|"]
     its = [i for i in data["issues"] if i.get("sprint") == sprint]
+    tot = [0, 0]
     for st in order:
         group = [i for i in its if i["status"] == st]
         if not group:
             continue
+        ts = [timesheet(i) for i in group]
+        act, rem = sum(t[0] for t in ts), sum(t[1] for t in ts)
+        tot = [tot[0] + act, tot[1] + rem]
         keys = ", ".join(f"#{{{i['key']}}}" for i in group)
-        rows.append(f"| {st} | {len(group)} | {sum(i['swp'] for i in group)} | {sum(i['hours'] for i in group)} | {keys} |")
-    rows.append(f"| **Cam kết** | **{len(its)}** | **{sum(i['swp'] for i in its)}** | **{sum(i['hours'] for i in its)}** | |")
+        rows.append(f"| {st} | {len(group)} | {sum(i['swp'] for i in group)} | {sum(i['hours'] for i in group)} "
+                    f"| {act} | {rem} | {keys} |")
+    rows.append(f"| **Cam kết** | **{len(its)}** | **{sum(i['swp'] for i in its)}** | **{sum(i['hours'] for i in its)}** "
+                f"| **{tot[0]}** | **{tot[1]}** | |")
     return "\n".join(rows)

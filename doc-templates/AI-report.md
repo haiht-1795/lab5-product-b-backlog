@@ -13,6 +13,7 @@ Công cụ: Claude Code (Claude Opus 5.5) chạy trong VS Code, có quyền đ�
 | Quy giờ | Cùng skill | Quy ước cố định `SWP × 4h × k` nằm trong code (estimate.md §2), không để AI ước giờ tự do từng issue. |
 | Ghi SWP lên Project | Agent chạy script `gh` | AI viết [github-issues-sync.py](scripts/github-issues-sync.py) (tạo issue, nối sub-issue) và [github-project-sync.py](scripts/github-project-sync.py) (tạo trường, ghi Status/Iteration/SWP/Giờ/Phụ trách/Cấp/Ràng buộc bằng GraphQL theo lô 20 mutation). Script chỉ đọc `backlog-scored.json` sau review, nên SWP trên Project là SWP đã chốt. Script chạy lại được (map khóa → số issue trong `github-map.json`), không tạo trùng. |
 | Báo cáo tiến độ | Skill `dataviz` (quy tắc vẽ biểu đồ) + script [burndown-chart-svg.py](scripts/burndown-chart-svg.py) | Nhật ký ngày giả lập viết tay ở `backlog/sprint-1-daily-log.json` (issue/sub-issue xong ngày nào). Script tính SWP/giờ còn lại và vẽ SVG một trục. Bảng trạng thái render từ dữ liệu, không gõ tay. |
+| Kiểm kế hoạch | Script [plan-capacity-check.py](scripts/plan-capacity-check.py) | Sau khi học viên hỏi lại "plan có chỗ nào không hợp lý, trạng thái và giờ ước/thực tế đã đồng bộ chưa": tính tải từng người theo sprint so với năng lực (đã chia hệ số thực tế/ước), kiểm phụ thuộc, lập bảng giờ ước/thực tế/còn lại. |
 | Tài liệu | Script [render-doc-tables.py](scripts/render-doc-tables.py) | Văn bản viết ở `doc-templates/`. Bảng số liệu và số issue `#n` được script điền vào, tránh lệch giữa tài liệu và Project. |
 
 ## 2. Review output của AI
@@ -33,6 +34,7 @@ Công cụ: Claude Code (Claude Opus 5.5) chạy trong VS Code, có quyền đ�
 | 5 | Tính năng FT-04-06 (kiểm khớp vùng nhiệt) không có issue nào phủ | Script kiểm phủ 74 tính năng LAB-1 | Gán vào #{I-0301} |
 | 6 | Tổng LAB-5 thấp hơn LAB-1 ≈ 45%; các epic thô thấp 48–73% | Bảng so sánh tự sinh | Không chỉnh số cho khớp. Ghi nguyên nhân (chưa issue hóa, khác cơ sở giờ/ngày) và đưa thành rủi ro R-06 |
 | 7 | Văn bản báo cáo ghi sai ngày đường burndown đi ngang, sai số issue "+1 pháp lý" (9 → 8) | Tự đối chiếu văn bản với bảng sinh ra | Sửa văn bản; số trong bảng do script sinh nên không sai |
+| 8 | Kế hoạch ban đầu chỉ cân tổng SWP/giờ, không cân theo người: Sprint 1 BE2 152%, FE1 27%; Sprint 2 sơ bộ BE2 193%; panel kiểm giờ (#{I-0808}) xếp trước khi có tuyến (#{I-0701}); không có giờ thực tế | Học viên hỏi lại; script kiểm tải + phụ thuộc | Cân lại người phụ trách Sprint 1, thêm #{I-0205} cho FE1, lập lại Sprint 2–3, thêm trường Giờ thực tế / Giờ còn lại lên Project, thêm rủi ro R-08 |
 
 ## 3. Điểm đặc biệt trong cách dùng AI
 

@@ -113,6 +113,9 @@ def main():
         it["reviewS"], it["reviewC"] = rv.get("S"), rv.get("C")
         it["hours"], it["k"] = hours_for(swp_final, it.get("oqMode", ""))
         it["subIssues"] = split_hours(it["hours"], it.get("subs", []))
+        # Timesheet data (actual / re-estimated remaining) passes through untouched for reporting.
+        for n, s in enumerate(it["subIssues"], 1):
+            s.update(it.get("subActual", {}).get(str(n), {}))
         it["flags"] = flags_for(it, swp_final, it["hours"], it["subIssues"])
 
     samples = frozen_samples or pick_samples(data["issues"])

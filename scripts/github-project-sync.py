@@ -49,12 +49,21 @@ def rows(data):
                           "Ràng buộc đặc thù": "Giờ lái 2024" if ep.get("constraint") else "Không"}
     for it in data["issues"]:
         base = {"Iteration": it.get("sprint"), "Ràng buộc đặc thù": constraint(it), "Epic": labels[it["epic"]]}
+        subs = it["subIssues"]
+        # Issue-level timesheet = own values, or the sum of its sub-issues when they carry timesheet data.
+        if subs and any("actual" in s for s in subs):
+            actual = sum(s.get("actual", 0) for s in subs)
+            remaining = sum(s.get("remaining", 0 if s.get("status") == "Done" else s["hours"]) for s in subs)
+        else:
+            actual, remaining = it.get("actual"), it.get("remaining")
         yield it["key"], {**base, "Status": it["status"], "Cấp": "Issue", "SWP": it["swp"],
-                          "Giờ ước lượng": it["hours"], "Phụ trách (giả định)": it["owner"]}
-        for n, sub in enumerate(it["subIssues"], 1):
+                          "Giờ ước lượng": it["hours"], "Phụ trách (giả định)": it["owner"],
+                          "Giờ thực tế": actual, "Giờ còn lại (ước lại)": remaining}
+        for n, sub in enumerate(subs, 1):
             sst = sub["status"] or ("Done" if it["status"] == "Done" else "Todo")
-            yield f"{it['key']}.{n}", {**base, "Status": sst, "Cấp": "Sub-issue",
-                                      "Giờ ước lượng": sub["hours"], "Phụ trách (giả định)": sub["owner"]}
+            yield f"{it['key']}.{n}", {**base, "Status": sst, "Cấp": "Sub-issue", "Giờ ước lượng": sub["hours"],
+                                      "Phụ trách (giả định)": sub["owner"], "Giờ thực tế": sub.get("actual"),
+                                      "Giờ còn lại (ước lại)": sub.get("remaining")}
 
 
 def value_literal(field, val):
@@ -69,9 +78,15 @@ def write_values(pid, fields, items, data, only=None):
     muts = []
     for key, vals in rows(data):
         for fname, val in vals.items():
-            if val in (None, "") or (only and fname not in only):
+            if only and fname not in only:
                 continue
             f = fields[fname]
+            if fname == "Iteration" and val is None:  # issue taken out of a sprint during re-planning
+                muts.append(f'clearProjectV2ItemFieldValue(input:{{projectId:"{pid}",itemId:"{items[key]}",'
+                            f'fieldId:"{f["id"]}"}}){{projectV2Item{{id}}}}')
+                continue
+            if val in (None, ""):
+                continue
             muts.append(f'updateProjectV2ItemFieldValue(input:{{projectId:"{pid}",itemId:"{items[key]}",'
                         f'fieldId:"{f["id"]}",value:{value_literal(f, val)}}}){{projectV2Item{{id}}}}')
     for i in range(0, len(muts), BATCH):

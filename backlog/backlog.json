@@ -154,9 +154,11 @@
    "S": 3,
    "C": 2,
    "owner": "TL",
-   "sprint": 1,
    "status": "Done",
-   "dod": "Build + lint + unit test chạy trên CI; import chéo repository giữa module bị ESLint chặn"
+   "dod": "Build + lint + unit test chạy trên CI; import chéo repository giữa module bị ESLint chặn",
+   "sprint": 1,
+   "actual": 10,
+   "remaining": 0
   },
   {
    "key": "I-0102",
@@ -167,9 +169,14 @@
    "S": 3,
    "C": 3,
    "owner": "BE3",
-   "sprint": 1,
    "status": "Done",
-   "dod": "terraform apply tạo được dev; stg Multi-AZ; secret qua Secrets Manager, không có trong repo"
+   "dod": "terraform apply tạo được dev; stg Multi-AZ; secret qua Secrets Manager, không có trong repo",
+   "sprint": 1,
+   "actual": 18,
+   "remaining": 0,
+   "deps": [
+    "I-0101"
+   ]
   },
   {
    "key": "I-0103",
@@ -180,9 +187,14 @@
    "S": 3,
    "C": 3,
    "owner": "BE2",
-   "sprint": 1,
    "status": "In Review",
-   "dod": "Đăng nhập qua IdP test; vai trò QA/MDM/SYS bị yêu cầu MFA (MFA_REQUIRED)"
+   "dod": "Đăng nhập qua IdP test; vai trò QA/MDM/SYS bị yêu cầu MFA (MFA_REQUIRED)",
+   "sprint": 1,
+   "actual": 22,
+   "remaining": 2,
+   "deps": [
+    "I-0101"
+   ]
   },
   {
    "key": "I-0104",
@@ -193,7 +205,6 @@
    "S": 4,
    "C": 3,
    "owner": "BE2",
-   "sprint": 2,
    "status": "Todo",
    "dod": "Ma trận E2E PERM × vai trò khớp permissions-matrix.md; không có vai trò toàn quyền (G-11)",
    "subs": [
@@ -207,6 +218,9 @@
      0.5,
      "QA1"
     ]
+   ],
+   "deps": [
+    "I-0103"
    ]
   },
   {
@@ -218,9 +232,11 @@
    "S": 3,
    "C": 3,
    "owner": "BE3",
-   "sprint": 2,
    "status": "Todo",
-   "dod": "Người duyệt ≠ người lập bị chặn ở API và DB (CHECK); có audit"
+   "dod": "Người duyệt ≠ người lập bị chặn ở API và DB (CHECK); có audit",
+   "deps": [
+    "I-0104"
+   ]
   },
   {
    "key": "I-0106",
@@ -231,7 +247,6 @@
    "S": 3,
    "C": 4,
    "owner": "BE2",
-   "sprint": 1,
    "status": "Done",
    "dod": "UPDATE/DELETE bảng [APPEND] bằng role ứng dụng → permission denied; hash chain kiểm được",
    "subs": [
@@ -244,9 +259,23 @@
     [
      "Middleware correlationId + ghi audit_event có hash chain",
      0.5,
-     "BE2",
+     "BE1",
      "Done"
     ]
+   ],
+   "sprint": 1,
+   "subActual": {
+    "2": {
+     "actual": 20,
+     "remaining": 0
+    },
+    "1": {
+     "actual": 15,
+     "remaining": 0
+    }
+   },
+   "deps": [
+    "I-0101"
    ]
   },
   {
@@ -258,9 +287,14 @@
    "S": 2,
    "C": 3,
    "owner": "BE3",
-   "sprint": 1,
    "status": "Done",
-   "dod": "Thiếu key → 400; cùng key khác payload → 409; gửi lại → response cũ"
+   "dod": "Thiếu key → 400; cùng key khác payload → 409; gửi lại → response cũ",
+   "sprint": 1,
+   "actual": 14,
+   "remaining": 0,
+   "deps": [
+    "I-0101"
+   ]
   },
   {
    "key": "I-0108",
@@ -271,7 +305,6 @@
    "S": 2,
    "C": 2,
    "owner": "BE3",
-   "sprint": 3,
    "status": "Todo",
    "dod": "Mail lỗi được gửi lại tối đa 5 lần; không gửi trùng"
   },
@@ -297,7 +330,6 @@
    "S": 4,
    "C": 2,
    "owner": "BE1",
-   "sprint": 2,
    "status": "Todo",
    "dod": "Seed CHI-001 = bò 消費期限 mã 10 số, AMB-001 = gạo; không có vị trí A-Q; Đông không có cận dưới"
   },
@@ -309,10 +341,13 @@
    "lab1": "FT-02-08",
    "S": 2,
    "C": 2,
-   "owner": "BE3",
-   "sprint": 2,
+   "owner": "TL",
    "status": "Todo",
-   "dod": "Xe có ≥1 ngăn gắn vùng nhiệt; tài xế chỉ lưu mã, tên hiển thị"
+   "dod": "Xe có ≥1 ngăn gắn vùng nhiệt; tài xế chỉ lưu mã, tên hiển thị",
+   "sprint": 2,
+   "deps": [
+    "I-0101"
+   ]
   },
   {
    "key": "I-0203",
@@ -323,7 +358,6 @@
    "S": 3,
    "C": 3,
    "owner": "BE1",
-   "sprint": 3,
    "status": "Todo",
    "dod": "Bản ghi chưa active không dùng được ở nghiệp vụ; duyệt khác người lập"
   },
@@ -336,9 +370,14 @@
    "S": 2,
    "C": 4,
    "owner": "BE3",
-   "sprint": 1,
    "status": "Done",
-   "dod": "Bản hiệu lực ngày mai không đổi phán định hôm nay; 2 version chồng lấn bị DB từ chối"
+   "dod": "Bản hiệu lực ngày mai không đổi phán định hôm nay; 2 version chồng lấn bị DB từ chối",
+   "sprint": 1,
+   "actual": 22,
+   "remaining": 0,
+   "deps": [
+    "I-0101"
+   ]
   },
   {
    "key": "I-0205",
@@ -351,9 +390,14 @@
    "oq": "OQ-26, OQ-45",
    "oqMode": "CFG",
    "owner": "FE1",
-   "sprint": 2,
-   "status": "Todo",
-   "dod": "Đủ trạng thái wireframe; Đông chỉ có cận trên; người duyệt ≠ người lập"
+   "status": "In Review",
+   "dod": "Đủ trạng thái wireframe; Đông chỉ có cận trên; người duyệt ≠ người lập",
+   "sprint": 1,
+   "actual": 16,
+   "remaining": 4,
+   "deps": [
+    "I-0204"
+   ]
   },
   {
    "key": "I-0206",
@@ -366,7 +410,6 @@
    "oq": "OQ-03, OQ-04, OQ-44",
    "oqMode": "CFG",
    "owner": "BE1",
-   "sprint": 2,
    "status": "Todo",
    "dod": "AGR-008 ở BUSINESS_REVIEW → window_rule NULL; cặp không có hợp đồng không tạo được dòng đơn"
   },
@@ -379,7 +422,6 @@
    "S": 1,
    "C": 2,
    "owner": "BE3",
-   "sprint": 2,
    "status": "Todo",
    "dod": "Mã lý do ROUTE_CHANGE, nhập tay, cách ly dùng chung một bảng"
   },
@@ -394,7 +436,6 @@
    "oq": "OQ-13",
    "oqMode": "CFG",
    "owner": "BE1",
-   "sprint": 3,
    "status": "Todo",
    "dod": "5.1℃ hàng Mát → QUARANTINED; inbound_inspection append-only có attempt_no",
    "subs": [
@@ -517,7 +558,6 @@
    "S": 4,
    "C": 4,
    "owner": "BE2",
-   "sprint": 2,
    "status": "Todo",
    "dod": "Chuyển trạng thái sai bị chặn; tồn âm bị chặn; lô ở nhiều vị trí",
    "subs": [
@@ -624,7 +664,6 @@
    "oq": "OQ-01, OQ-02, OQ-05, OQ-57",
    "oqMode": "CFG",
    "owner": "BE1",
-   "sprint": 1,
    "status": "In Progress",
    "dod": "Ví dụ RFP CUS-003 CHI-002 chặn lô 2026-09-18; 消費 = ngày giao → loại #1",
    "subs": [
@@ -650,8 +689,30 @@
      "Test ví dụ RFP (CUS-003/CHI-002, AGR-008)",
      0.25,
      "QA1",
-     "Todo"
+     "In Progress"
     ]
+   ],
+   "sprint": 1,
+   "subActual": {
+    "1": {
+     "actual": 15,
+     "remaining": 0
+    },
+    "2": {
+     "actual": 16,
+     "remaining": 0
+    },
+    "3": {
+     "actual": 8,
+     "remaining": 5
+    },
+    "4": {
+     "actual": 8,
+     "remaining": 5
+    }
+   },
+   "deps": [
+    "I-0101"
    ]
   },
   {
@@ -663,9 +724,12 @@
    "S": 3,
    "C": 3,
    "owner": "BE1",
-   "sprint": 2,
    "status": "Todo",
-   "dod": "Lô vi phạm #1 và #5 ghi #1; cùng hạn → nhập trước được chọn"
+   "dod": "Lô vi phạm #1 và #5 ghi #1; cùng hạn → nhập trước được chọn",
+   "sprint": 2,
+   "deps": [
+    "I-0501"
+   ]
   },
   {
    "key": "I-0503",
@@ -676,7 +740,6 @@
    "S": 3,
    "C": 4,
    "owner": "BE2",
-   "sprint": 2,
    "status": "Todo",
    "dod": "20 request song song, tồn 100 → tổng phân bổ ≤ 100; run cũ SUPERSEDED, không xóa",
    "subs": [
@@ -690,6 +753,10 @@
      0.5,
      "QA1"
     ]
+   ],
+   "deps": [
+    "I-0502",
+    "I-0401"
    ]
   },
   {
@@ -701,9 +768,12 @@
    "S": 3,
    "C": 3,
    "owner": "FE1",
-   "sprint": 3,
    "status": "Todo",
-   "dod": "Hiện đủ trạng thái wireframe; UI ghi 契約ルール（hợp đồng）"
+   "dod": "Hiện đủ trạng thái wireframe; UI ghi 契約ルール（hợp đồng）",
+   "sprint": 2,
+   "deps": [
+    "I-0502"
+   ]
   },
   {
    "key": "I-0505",
@@ -886,7 +956,6 @@
    "oq": "OQ-47, OQ-65",
    "oqMode": "CFG",
    "owner": "BE3",
-   "sprint": 3,
    "status": "Todo",
    "dod": "Đơn Đông + xe chỉ có ngăn Mát → ở danh sách chưa gán kèm lý do",
    "subs": [
@@ -910,6 +979,11 @@
      0.2,
      "QA1"
     ]
+   ],
+   "sprint": 3,
+   "deps": [
+    "I-0202",
+    "I-0502"
    ]
   },
   {
@@ -923,7 +997,6 @@
    "oq": "OQ-35",
    "oqMode": "STUB",
    "owner": "TL",
-   "sprint": 3,
    "status": "Todo",
    "dod": "Timeout 3s dùng cache; ước tính cũ > 24h → MAP_ESTIMATE_STALE; có fake provider cho test",
    "subs": [
@@ -935,8 +1008,16 @@
     [
      "Cache + kiểm 24h",
      0.5,
-     "BE3"
+     "BE1",
+     null
     ]
+   ],
+   "sprint": 3,
+   "subActual": {
+    "2": {}
+   },
+   "deps": [
+    "I-0101"
    ]
   },
   {
@@ -948,7 +1029,6 @@
    "S": 4,
    "C": 4,
    "owner": "FE1",
-   "sprint": 3,
    "status": "Todo",
    "dod": "Kéo thả đổi thứ tự → ETA tính lại; route về DRAFT",
    "subs": [
@@ -972,6 +1052,10 @@
      0.2,
      "QA1"
     ]
+   ],
+   "sprint": 3,
+   "deps": [
+    "I-0701"
    ]
   },
   {
@@ -1013,7 +1097,6 @@
    "oq": "OQ-33, OQ-36",
    "oqMode": "CFG",
    "owner": "TL",
-   "sprint": 1,
    "status": "Done",
    "dod": "Version chưa xác minh pháp lý → banner trên SCR-017 và SCR-060; 8 mã tham số đủ",
    "subs": [
@@ -1029,6 +1112,20 @@
      "FE1",
      "Done"
     ]
+   ],
+   "sprint": 1,
+   "subActual": {
+    "1": {
+     "actual": 17,
+     "remaining": 0
+    },
+    "2": {
+     "actual": 14,
+     "remaining": 0
+    }
+   },
+   "deps": [
+    "I-0204"
    ]
   },
   {
@@ -1043,9 +1140,11 @@
    "oqMode": "BLOCK",
    "type": "clarify",
    "owner": "BrSE",
-   "sprint": 1,
    "status": "Blocked",
-   "dod": "Có văn bản trả lời của khách cho 4 OQ; người phía khách chịu trách nhiệm xác minh pháp lý được nêu tên"
+   "dod": "Có văn bản trả lời của khách cho 4 OQ; người phía khách chịu trách nhiệm xác minh pháp lý được nêu tên",
+   "sprint": 1,
+   "actual": 6,
+   "remaining": 9
   },
   {
    "key": "I-0803",
@@ -1059,7 +1158,6 @@
    "oq": "OQ-29, OQ-46",
    "oqMode": "CFG",
    "owner": "BE2",
-   "sprint": 1,
    "status": "In Progress",
    "dod": "Tuyến qua đêm chia đúng ngày; nhiều tuyến/ngày được gộp; thiếu actual D−1 → WARN",
    "subs": [
@@ -1078,7 +1176,7 @@
     [
      "Gộp actual + tuyến PUBLISHED cùng tài xế",
      0.25,
-     "BE2",
+     "BE3",
      "Todo"
     ],
     [
@@ -1087,6 +1185,28 @@
      "QA1",
      "Todo"
     ]
+   ],
+   "sprint": 1,
+   "subActual": {
+    "3": {
+     "actual": 0,
+     "remaining": 13
+    },
+    "1": {
+     "actual": 18,
+     "remaining": 0
+    },
+    "2": {
+     "actual": 10,
+     "remaining": 9
+    },
+    "4": {
+     "actual": 0,
+     "remaining": 13
+    }
+   },
+   "deps": [
+    "I-0801"
    ]
   },
   {
@@ -1101,7 +1221,6 @@
    "oq": "OQ-29",
    "oqMode": "CFG",
    "owner": "BE2",
-   "sprint": 2,
    "status": "Todo",
    "dod": "Ràng buộc 15h00 → PASS-WARN, 15h01 → BLOCK; nghỉ 8h59 → BLOCK",
    "subs": [
@@ -1115,6 +1234,10 @@
      0.5,
      "BE2"
     ]
+   ],
+   "sprint": 2,
+   "deps": [
+    "I-0803"
    ]
   },
   {
@@ -1129,9 +1252,12 @@
    "oq": "OQ-28",
    "oqMode": "CFG",
    "owner": "BE1",
-   "sprint": 2,
    "status": "Todo",
-   "dod": "Cùng dữ liệu cho kết quả khác nhau đúng theo mode BOTH/EITHER; khối 2 tuần > 88h → BLOCK"
+   "dod": "Cùng dữ liệu cho kết quả khác nhau đúng theo mode BOTH/EITHER; khối 2 tuần > 88h → BLOCK",
+   "sprint": 2,
+   "deps": [
+    "I-0803"
+   ]
   },
   {
    "key": "I-0806",
@@ -1145,7 +1271,6 @@
    "oq": "OQ-31, OQ-46",
    "oqMode": "CFG",
    "owner": "BE3",
-   "sprint": 2,
    "status": "Todo",
    "dod": "Lái 5h liền → có BREAK auto_inserted trước mốc 4h; không chèn được → DUTY-CONT BLOCK, tô đỏ 4h00–4h01",
    "subs": [
@@ -1159,6 +1284,10 @@
      0.5,
      "BE3"
     ]
+   ],
+   "sprint": 2,
+   "deps": [
+    "I-0803"
    ]
   },
   {
@@ -1173,7 +1302,6 @@
    "oq": "OQ-58",
    "oqMode": "STUB",
    "owner": "BE1",
-   "sprint": 3,
    "status": "Todo",
    "dod": "Công thức là strategy theo version quy tắc; mặc định ràng buộc − nghỉ − 8h/ngày; đổi công thức không đổi code gọi",
    "subs": [
@@ -1185,8 +1313,16 @@
     [
      "Tích lũy năm từ period_origin_date + test",
      0.5,
-     "QA1"
+     "BE1",
+     null
     ]
+   ],
+   "sprint": 3,
+   "subActual": {
+    "2": {}
+   },
+   "deps": [
+    "I-0803"
    ]
   },
   {
@@ -1198,7 +1334,6 @@
    "S": 4,
    "C": 3,
    "owner": "FE1",
-   "sprint": 2,
    "status": "Todo",
    "dod": "Có BLOCK → timeline tô đỏ đúng khoảng vi phạm, cuộn tới vi phạm đầu",
    "subs": [
@@ -1217,6 +1352,13 @@
      0.3,
      "FE1"
     ]
+   ],
+   "sprint": 3,
+   "deps": [
+    "I-0701",
+    "I-0804",
+    "I-0805",
+    "I-0806"
    ]
   },
   {
@@ -1231,7 +1373,6 @@
    "oq": "OQ-33, OQ-34",
    "oqMode": "CFG",
    "owner": "BE2",
-   "sprint": 3,
    "status": "Todo",
    "dod": "Không có nút override; kích hoạt version luật mới → tuyến đã công bố giữ version cũ; đổi version giữa kiểm và công bố → RULE_VERSION_CHANGED",
    "subs": [
@@ -1255,6 +1396,11 @@
      0.25,
      "QA1"
     ]
+   ],
+   "sprint": 3,
+   "deps": [
+    "I-0808",
+    "I-0702"
    ]
   },
   {
@@ -1268,9 +1414,13 @@
    "oq": "OQ-32",
    "oqMode": "STUB",
    "owner": "FE1",
-   "sprint": 3,
    "status": "Todo",
-   "dod": "Spec màn được review; DSP/DRV nhập giờ D−1; validator dùng được driver_duty_actual"
+   "dod": "Spec màn được review; DSP/DRV nhập giờ D−1; validator dùng được driver_duty_actual",
+   "sprint": 2,
+   "deps": [
+    "I-0202",
+    "I-0803"
+   ]
   },
   {
    "key": "I-0811",
@@ -1306,7 +1456,6 @@
    "C": 3,
    "legal": true,
    "owner": "QA1",
-   "sprint": 2,
    "status": "Todo",
    "dod": "16 ca biên + kịch bản R-06 chạy trên CI; bằng giới hạn = PASS (L4)",
    "subs": [
@@ -1328,8 +1477,17 @@
     [
      "Tích hợp CI + báo cáo",
      0.25,
-     "QA1"
+     "TL",
+     null
     ]
+   ],
+   "sprint": 2,
+   "subActual": {
+    "4": {}
+   },
+   "deps": [
+    "I-0801",
+    "I-0803"
    ]
   },
   {

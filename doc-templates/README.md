@@ -7,7 +7,7 @@
 - **Backlog break từ:** bộ thiết kế LAB-4 `lab 4-AIDD` (nộp 2026-11-14): 7 feature thiết kế sâu (F02 phần chính sách, F03, F04, F05, F06, F08, F09), 10 screen spec + wireframe, 9 ADR, 27 dòng truy vết ràng buộc. Các feature còn lại lấy ở mức kiến trúc/dữ liệu.
 - **PREMISE.md có thay đổi:** có. 6 thay đổi spec (S-01…S-06, chủ yếu ở phần giờ lái 2024), 8 giả định (A-01…A-08), 5 hướng chốt (D-01…D-05).
 - **Số epic:** 14 (F01…F13; F08 tách 2 epic, trong đó **E08 dành riêng cho giới hạn giờ lái xe tải 2024 — 改善基準告示**). 80 issue, 91 sub-issue, 482 SWP, 2.008 giờ.
-- **Sprint giả lập đã chạy:** Sprint 1 (2026-11-16 → 2026-11-27): cam kết 66 SWP, xong 32 SWP. Sprint 2 và 3 mới xếp sơ bộ.
+- **Sprint giả lập đã chạy:** Sprint 1 (2026-11-16 → 2026-11-27): cam kết 71 SWP / 287 giờ ước, xong 32 SWP, ghi 249 giờ thực tế. Sprint 2 và 3 đã lập lại theo năng lực từng người và phụ thuộc (progress-report.md §3).
 
 ## Link
 
