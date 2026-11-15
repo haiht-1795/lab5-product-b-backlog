@@ -76,7 +76,7 @@
    "title": "Pick, load, kiểm trước xuất, xác nhận xuất (4 chốt)",
    "spec": "F06-outbound-check; SCR051; SCR053; T-11/T-11b/T-12",
    "notIssued": "Tái kiểm sau FAIL kiểm trước xuất (OQ-61) làm bằng CFG trong #{I-0602}; deviation do chênh nhiệt tài xế/WHL (OQ-55) chưa thiết kế.",
-   "lab1Why": "Gần khớp: #{I-0604} (dỡ đơn → version tuyến mới → kiểm giờ lái lại, PREMISE D-02) tăng effort, bù phần giảm do tái dùng."
+   "lab1Why": "Gần khớp: #{I-0604} (dỡ đơn → version tuyến mới → kiểm giờ lái lại, task-breakdown §3) tăng effort, bù phần giảm do tái dùng."
   },
   {
    "key": "E07",

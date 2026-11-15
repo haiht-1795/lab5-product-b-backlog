@@ -43,7 +43,8 @@ def _issue_row(it):
 
 def _sample_row(it):
     if it["reviewS"] or it["reviewC"]:
-        decided = f'S{it["reviewS"] or it["S"]} × C{it["reviewC"] or it["C"]} → {it["swp"]}'
+        c_eff = min(5, (it["reviewC"] or it["C"]) + (1 if it.get("legal") else 0))  # same basis as skill column
+        decided = f'S{it["reviewS"] or it["S"]} × C{c_eff} → {it["swp"]}'
     else:
         decided = f'giữ {it["swp"]}'
     return _row([

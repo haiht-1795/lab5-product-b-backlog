@@ -30,6 +30,7 @@
 | `skills/` | `swp-scoring/`: skill chấm SWP tự viết (SKILL.md + script) |
 | `backlog/` | Dữ liệu nguồn: `backlog.json` (backlog), `swp-review.json` (quyết định review), `backlog-scored.json` (kết quả skill), `lab1-estimate.json` (man-day LAB-1), `sprint-1-daily-log.json`, `github-map.json` (khóa → số issue) |
 | `scripts/` | Đồng bộ issue/Project, vẽ burndown, render bảng vào tài liệu |
+| `.gitignore` | Bỏ qua cache Python, file môi trường, thư mục local của công cụ AI |
 | `doc-templates/` | Bản nguồn của 6 file Markdown ở gốc (bảng và số issue do script điền) |
 
 Chạy lại toàn bộ: `swp-score.py` → `github-issues-sync.py` → `github-project-sync.py` → `burndown-chart-svg.py` → `render-doc-tables.py` (lệnh đầy đủ ở đầu mỗi script).

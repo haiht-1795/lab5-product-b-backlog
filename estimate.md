@@ -10,7 +10,7 @@ Skill: [skills/swp-scoring](skills/swp-scoring/SKILL.md), tự viết (máy khô
 
 **Thang chấm:** Scope 1–5 (1 trường → luồng xuyên module) × Complexity 1–5 (CRUD → tích lũy nhiều ngày/offline mã hóa). **+1 Complexity** cho quy tắc lấy ngưỡng từ luật chưa xác minh (cờ `legal`, ở dự án này là giờ lái 2024). SWP = Fib(S × C): ≤2→1 · 3–4→2 · 5–6→3 · 8–10→5 · 12→8 · 15–16→13 · ≥20→21 (21 = phải tách).
 
-## 2. Issue mẫu skill chọn để kiểm
+## 1. Issue mẫu skill chọn để kiểm
 
 Skill chọn 26/80 issue theo 4 luật: R1 có flag độ hạt, R2 issue pháp lý SWP ≥ 8, R3 chấm lệch |S − C| ≥ 2, R4 issue lớn nhất mỗi epic chưa được chọn (đối chứng).
 Lần chạy đầu có 13 issue bị flag (12 `SUB-BIG`, 1 `NEED-SUB`). Lỗi nằm ở cách chia sub-issue, không ở SWP, nên đã chia lại sub-issue và giữ nguyên điểm. Lần chạy thứ hai không còn flag.
@@ -47,7 +47,7 @@ Người review **sửa 2 issue**, giữ nguyên 24 issue (lý do giữ ghi ở 
 
 Hai lần sửa bù trừ nhau (+5 / −5) nên tổng SWP không đổi (482). Đó là trùng hợp, không phải để cân tổng: một lần sửa vì skill bỏ sót phạm vi xuyên module do ràng buộc giờ lái, một lần vì skill cộng trùng +1 pháp lý.
 
-## 3. Cách quy ra giờ
+## 2. Cách quy ra giờ
 
 - **Cách đã chọn:** quy ước đổi SWP ra giờ, không ước giờ trực tiếp từng issue.
 - **Vì sao:** (1) tái lập được: cùng S, C cho cùng giờ, ai chạy cũng ra một kết quả; (2) người review chỉ tranh luận một con số (SWP), giờ tự theo; (3) ước giờ trực tiếp 80 issue bằng AI cho kết quả không ổn định giữa các lần chạy, và không có dữ liệu thực tế của đội để hiệu chỉnh.
@@ -58,7 +58,7 @@ Hai lần sửa bù trừ nhau (+5 / −5) nên tổng SWP không đổi (482). 
 - **Áp dụng nhất quán:** công thức nằm trong code của skill ([swp-score.py](skills/swp-scoring/scripts/swp-score.py)), không ai gõ tay giờ lên Project; script [github-project-sync.py](scripts/github-project-sync.py) chỉ đọc kết quả của skill. Đổi quy ước thì chạy lại skill và sync, mọi issue đổi theo.
 - **Năng lực sprint:** 6 giờ tập trung/người/ngày (PREMISE A-01), dùng chung cho kế hoạch sprint và cho so sánh với LAB-1.
 
-## 4. Tổng theo epic
+## 3. Tổng theo epic
 
 | Epic | Số issue | Số sub-issue | Tổng SWP | Tổng giờ | Ghi chú |
 |---|---:|---:|---:|---:|---|
@@ -78,7 +78,7 @@ Hai lần sửa bù trừ nhau (+5 / −5) nên tổng SWP không đổi (482). 
 | #14 Chuyển đổi dữ liệu | 3 | 4 | 18 | 77 | 1 STUB/BLOCK (k=1.25); 1 chờ spec/thiết kế |
 | **Tổng** | **80** | **91** | **482** | **2008** | |
 
-## 5. So với estimate LAB-1
+## 4. So với estimate LAB-1
 
 LAB-1 ước man-day (8h) cho phần **build FE + BE + UT** của 74 tính năng, cộng 25 MD dựng platform, tổng 610 MD. Các pha thiết kế, IT, ST, UAT, migration, đào tạo, PM được tính theo tỉ lệ và hạng mục cố định ngoài con số này. Vì vậy chỉ so phần build. Giờ LAB-5 quy ra MD theo **6 giờ tập trung/ngày** (cùng cơ sở với năng lực sprint), không chia 8. Tính năng LAB-1 xuất hiện ở nhiều epic (FT-08-04) được chia đều.
 
@@ -89,7 +89,7 @@ LAB-1 ước man-day (8h) cho phần **build FE + BE + UT** của 74 tính năng
 | E03 Nhập hàng & kiểm nhập | 48.0 | 150 → 25.0 | -48% | SCR-020 hẹn nhập và SCR-023 vùng nhiệt tạm (FT-03-01/06, 11 MD) mới có issue thiết kế, phần làm chưa ước lượng (OQ-63 BLOCK). |
 | E04 Tồn kho, lô, cách ly | 40.0 | 126 → 21.0 | -48% | Kiểm kê mù FT-04-04 (12 MD) mới có issue thiết kế (OQ-62 BLOCK). |
 | E05 Đơn hàng & phân bổ (消費/賞味, 1/3·1/2, cấm đảo ngày, FEFO) | 55.0 | 159 → 26.5 | -52% | Tái dùng expiry-rules và allocation-engine đã có unit test ở prototype LAB-2 (PREMISE LAB-4: chỉ giữ module quy tắc thuần); SCR-040/041 còn mức List. |
-| E06 Pick, load, kiểm trước xuất, xác nhận xuất (4 chốt) | 32.0 | 189 → 31.5 | -2% | Gần khớp: #79 (dỡ đơn → version tuyến mới → kiểm giờ lái lại, PREMISE D-02) tăng effort, bù phần giảm do tái dùng. |
+| E06 Pick, load, kiểm trước xuất, xác nhận xuất (4 chốt) | 32.0 | 189 → 31.5 | -2% | Gần khớp: #79 (dỡ đơn → version tuyến mới → kiểm giờ lái lại, task-breakdown §3) tăng effort, bù phần giảm do tái dùng. |
 | E07 Lập tuyến & bản đồ (phần không phụ thuộc luật giờ lái) | 24.0 | 157 → 26.2 | +9% | Gần khớp: thêm adapter bản đồ + fake provider (PREMISE S-06), bản đồ chuyển từ F12 sang đây. |
 | E08 ⚠ Giới hạn giờ lái xe tải 2024 (改善基準告示) | 43.0 | 371 → 61.8 | +44% | Ràng buộc 2024 làm tăng effort: validator tách 5 issue theo nhóm mã, +1 Complexity pháp lý, bộ test biên #133 (PREMISE S-04), SCR-063 (S-01), SCR-062 (S-03), cổng công bố trong transaction. LAB-1 chưa có các phần này. |
 | E09 Giao hàng, POD offline, khiếu nại | 53.0 | 162 → 27.0 | -49% | F07 chỉ có ở mức kiến trúc (ADR-009) → issue thô; OQ-38 BLOCK, OQ-39 STUB. |

@@ -12,7 +12,7 @@ Nguồn duy nhất của backlog là [backlog/backlog.json](backlog/backlog.json
 | Issue | 1 kết quả kiểm chứng được: 1 quy tắc/nhóm mã quy tắc, 1 màn kèm API, 1 luồng transaction, hoặc 1 việc làm rõ/thiết kế. Bám 1 dòng truy vết T-xx hoặc 1 user story của LAB-4 | Viết được tiêu chí Done một câu, kiểm được bằng test hay demo; SWP ≤ 13 (SWP 21 → bắt buộc tách issue) | **SWP** (đã review) + **giờ** |
 | Sub-issue | Phần việc của 1 người trong 1 issue (BE / FE / test) | ≤ 16 giờ | Giờ (chia từ giờ issue cha) |
 
-**Khi nào tách sub-issue:** issue > 24 giờ (thường SWP ≥ 8, hoặc SWP 5 có OQ STUB), hoặc issue cần nhiều người (BE + FE + QA). Skill [skills/swp-scoring](skills/swp-scoring/SKILL.md) tự flag `NEED-SUB` (issue > 24h chưa tách) và `SUB-BIG` (sub-issue > 16h). Lần chạy đầu bắt được 13 issue vi phạm, đã sửa hết (estimate.md §2).
+**Khi nào tách sub-issue:** issue > 24 giờ (thường SWP ≥ 8, hoặc SWP 5 có OQ STUB), hoặc issue cần nhiều người (BE + FE + QA). Skill [skills/swp-scoring](skills/swp-scoring/SKILL.md) tự flag `NEED-SUB` (issue > 24h chưa tách) và `SUB-BIG` (sub-issue > 16h). Lần chạy đầu bắt được 13 issue vi phạm, đã sửa hết (estimate.md §1).
 
 **Không để task mơ hồ:** issue thiếu spec màn được gắn `needs-design` và không xếp sprint (PREMISE A-05). Issue chịu câu hỏi chưa trả lời mang nhãn `oq:CFG/STUB/BLOCK` theo cột "Dev" của OQ LAB-4.
 
@@ -69,7 +69,7 @@ Toàn bộ nằm ở epic #8 (nhãn `constraint:duty-2024`, trường `Ràng bu�
 | (kéo theo) Revision/hủy tuyến | #100 | Mỗi revision phải kiểm giờ lại trước khi công bố lại. |
 | (kéo theo) Tài xế chỉ nhận bản mới nhất có điểm nghỉ | #138 | PWA thuộc F07 (PREMISE D-05). |
 
-**Ảnh hưởng tới break task và estimate:** 13 issue / 90 SWP / 371 giờ ở E08, gồm 8 issue +1 Complexity pháp lý. So với LAB-1, phần này **tăng khoảng 44%** (estimate.md §5), trong khi các epic khác giảm vì còn thô. Sprint 1 ưu tiên E08 (#102, #105, #106) vì đây là đường găng có rủi ro chờ khách.
+**Ảnh hưởng tới break task và estimate:** 13 issue / 90 SWP / 371 giờ ở E08, gồm 8 issue +1 Complexity pháp lý. So với LAB-1, phần này **tăng khoảng 44%** (estimate.md §4), trong khi các epic khác giảm vì còn thô. Sprint 1 ưu tiên E08 (#102, #105, #106) vì đây là đường găng có rủi ro chờ khách.
 
 ## 4. Chỗ hở hoặc mâu thuẫn của spec LAB-4 phát hiện khi break
 
